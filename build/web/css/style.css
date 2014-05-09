@@ -1,0 +1,430 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 1, 2014, 9:48:53 PM
+    Author     : petricioiurobert
+*/
+a {
+    text-decoration: none;
+    outline: 0;
+}
+a:visited {
+    color:#fff;
+}
+html { 
+    background: url(../images/background-wallpaper.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+.nav-bar {
+    width: 100%;
+    position: fixed;
+    height:60px;
+    background-color:#ff6600;
+    top:0px;
+    left:0px;
+    opacity: 1;
+    z-index: 1;
+    box-shadow: 0px 0px 1px 2px;
+}
+.nav-bar ul {
+    width:900px;
+    height:100%;
+    position: absolute;
+    top:0px;
+    left:50%;
+    padding: 0;
+    list-style: none;
+    margin: 0 0 3em -450px;
+}
+
+.nav-bar ul li {
+    float:right;
+    cursor: pointer;
+}
+.nav-bar ul li a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #069;
+    border-right: 1px solid #ccc; 
+    height: 68%;
+    text-align: center;
+    vertical-align: central;
+}
+.nav-bar ul ul li a {
+    border-right: 0px solid #ccc;
+}
+.nav-bar ul li:hover > ul {
+    display: block;
+}
+.nav-bar ul ul {
+    display: none;
+    background: #ff6600; 
+    padding: 0;
+    position: absolute; 
+    top: 60px;
+    margin: 0px 0px 0px 300px;
+    width: 150px;
+    height:100px;
+}
+.nav-bar ul ul li {
+    float: none; 
+}
+.nav-bar ul ul li a {
+    padding:10px;
+    height:30px;
+    color:#fff;
+}	
+.nav-bar ul ul li a:hover {
+    background: #000000;
+    color:#fff;
+}
+.nav-bar ul li a input{
+    padding:15px;
+    height:30px;
+    color:#000;
+    border: none;
+    outline: 0;
+    font-family: Copperplate, "Copperplate Gothic Light", fantasy;
+    font-size:15px;
+    width:150px;
+    background-color:transparent;
+}
+#avatar-img {
+    height: 40px;
+    width: 40px;
+}
+#register-form-container {
+    width:450px;
+    height:450px;
+    background-color:#fff;
+    opacity:0.9;
+    position: absolute;
+    top:50%;
+    left:50%;
+    margin: -225px 0 0 -225px;
+}
+#register-form-container form {
+    position: absolute;
+    top:50%;
+    left:50%;
+    margin:-200px 0 0 -200px;
+}
+#register-form-container form input[type=text] {
+    width: 400px;
+    height:50px;
+    display: block;
+    border:none;
+    outline:0;
+    text-align: center;
+    font-family: Copperplate, "Copperplate Gothic Light", fantasy;
+    font-size:18px;
+    border-bottom: solid 1px #ccc;
+}
+#register-form-container form input[type=password] {
+    width: 400px;
+    height:50px;
+    display: block;
+    border:none;
+    outline:0;
+    text-align: center;
+    font-family: Copperplate, "Copperplate Gothic Light", fantasy;
+    font-size:18px;
+    border-bottom: solid 1px #ccc;
+}
+#register-form-container form input[type=submit] {
+    margin-top:10px;
+    margin-left:100px;
+    width: 200px;
+    height:50px;
+    display: block;
+    border:none;
+    outline:0;
+    text-align: center;
+}
+#register-form-container form input[type=submit]:hover {
+    background-color:#069;
+    cursor:pointer;
+    color:#fff;
+}
+#register-form-container p {
+    position: absolute;
+    top:300px;
+    text-align: center;
+    width: 100%;
+}
+#register-form-container p img {
+    width:25px;
+    height: 25px;
+    cursor: pointer;
+}
+#option-menu {
+    width: 250px;
+    height:500px;
+    background-color:#fff;
+    position: fixed;
+    top:60px;
+    left:50%;
+    margin:0px 0 0 -450px;
+    box-shadow: 2px 0px 2px rgba(0,0,0,0.2);
+}
+#option-menu-title {
+    top:0;
+    padding: 0;
+    height: 50px;
+    box-shadow: 0px 0px 2px 1px #000;
+    margin-top: -15px;
+    background-color: #000;
+    cursor: pointer;
+}
+#option-menu-title h3 {
+    padding-top: 15;
+    display: block;
+    text-align: center;
+    font-family: Copperplate, "Copperplate Gothic Light", fantasy;
+    font-size: 15px;
+    color: #fff;
+}
+#option-menu ul {
+    list-style: none;
+    padding: 0px;
+    margin-top: 10px;
+}
+#option-menu ul li {
+    width: 100%;
+    height:50px;
+    overflow: hidden;
+    display: block;
+    background: #fff;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    margin-bottom: 4px;
+    border-left: 10px solid #000;
+    transition: all 300ms ease-in-out;
+    cursor:pointer;
+}
+.menu-icon {
+    padding-top:5px;
+    width:40px;
+}
+#option-menu ul li a {
+    padding-left:5px;
+    text-align: left;
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: #333;
+    position:relative;
+    font-family: Copperplate, "Copperplate Gothic Light", fantasy;
+}
+#option-menu ul li a:hover {
+    color: #fff;
+}
+#option-menu ul li:hover {
+    background-color: #0099ff;
+    border-color: #ffff00;
+    -webkit-transition: border-color background-color 0.5s;
+}
+#file-system-container {
+    width: 650px;
+    min-height: 500px;
+    background-color:#fff;
+    top:60px;
+    left:50%;
+    position: absolute;
+    margin: 0px 0 0 -200px;
+    border-left: solid 1px #ccc;
+}
+#file-system-container nav ul {
+    list-style: none;
+}
+#file-system-container nav ul li {
+    display: inline;
+    padding:0;
+    font-family: Copperplate, "Copperplate Gothic Light", fantasy;
+}
+#file-system-container nav ul li a {
+    color: #069;
+    border-radius:5px;
+    padding:5px;
+    padding-top: 10px;
+    cursor:pointer;
+    width:100px;
+    height:100px;
+    border-bottom: solid 1px;
+    border-top: solid 1px;
+}
+#file-system-container nav ul li a:hover {
+    background-color:#069;
+    color:#fff;
+    -webkit-transition: background-color 1s;
+}
+#file-system-container nav p {
+    display: inline;
+    padding: 10px;
+    font-family: Copperplate, "Copperplate Gothic Light", fantasy;
+}
+#files-container {
+    list-style: none;
+    padding: 0px;
+}
+#file-system-container tr {
+    height: 30px;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+#files-container tr:hover{
+    background-color:#069;
+    color:#fff;
+    cursor: pointer;
+    
+}
+#files-container td img{
+    width:15px;
+}
+td.td-download {
+    width:40px;
+}
+td.td-download a img {
+    margin-left:5px;
+}
+td.td-date {
+    width: 135px;
+}
+#files-container td.td-date span {
+    font-family: "Big Caslon", "Book Antiqua", "Palatino Linotype", Georgia, serif;
+    border-radius:5px;
+    background-color: #ccccff;
+    padding:2px;
+    min-width:120px;
+    display: block;
+    box-shadow: 1px 3px 3px rgba(0,0,0,0.2);
+}
+td.td-title {
+    width: 400px;
+}
+td.td-size {
+    width: 75px;
+    text-align: center;
+}
+.file-upload-container {
+    top:0px;
+    left:0px;
+    position: absolute;
+    display: inline;
+   // overflow: hidden;
+    margin:10px;
+    background-color:#900;
+    
+}
+.file-upload {
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    display: inline;
+}
+.upload-btn {
+    position: absolute;
+    top:0px;
+    left:0px;
+    margin-left:80px;
+    margin-top:10px;
+    background-color: #069;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border:none;
+    color:#fff;
+    width:100px;
+    height:50px;
+    cursor: pointer;
+}
+.fileUpload button {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border:none;
+    display: inline;
+    background-color:#660066;
+    cursor:pointer;
+    height: 50px;
+    color:#fff;
+}
+.fileUpload button:hover {
+    background-color: #cc00cc;
+}
+.upload-btn:hover {
+    background-color: #0099ff;
+}
+.fileUpload {
+	position: relative;
+	overflow: hidden;
+	margin: 10px;
+        color:#fff;
+}
+.fileUpload input.upload {
+	position: absolute;
+	top: 0;
+	left: 0;
+        margin:0;
+	padding: 0;
+	font-size: 20px;
+	cursor: pointer;
+	opacity: 0;
+	filter: alpha(opacity=0);
+        height: 50px;
+}
+.fileDescription {
+    color:#fff;
+    height:40px;
+    background-color: #330033;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    margin:10px;
+    margin-left:12px;
+    opacity: 0;
+    padding-top:20px;
+    padding-left:20px;
+    font-family: Copperplate, "Copperplate Gothic Light", fantasy;
+}
+#progressNumber {
+    left:0px;
+    top:0px;
+    width:0%;
+    height:50px;
+    background-color:#0099ff;
+    text-align:center;
+    padding-top:10px;
+    color:#fff;
+}
+#progress-bar-container {
+    background-color:#ccc;
+    width:600px;
+    height:40px;
+    border-radius:50px;
+    margin:20px;
+    overflow:hidden;
+}
+#tag-upload-container {
+    width:100%;
+    height:150px;
+    word-wrap: break-word;
+    word-break: normal;
+    display: block;
+}
+#tag-input {
+    position: absolute;
+    top:0px;
+    left:0px;
+    padding:10px;
+    width:200px;
+    font-size:15px;
+    outline:0;
+    font-family: Copperplate, "Copperplate Gothic Light", fantasy;
+    margin:15px 0 0 200px;
+}
