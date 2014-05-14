@@ -18,6 +18,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSInputFile;
 import com.spring.tutorial.mongo.MongoDB;
+import facebook4j.Facebook;
+import facebook4j.FacebookException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -44,7 +46,7 @@ public class FileUploader {
         this.response = res;
     }
     
-    public String upload() throws IOException, ServletException {
+    public String upload() throws IOException, ServletException, FacebookException {
         OutputStream output = null;
         InputStream fileContent = null;
         final Part filePart;
@@ -102,6 +104,7 @@ public class FileUploader {
                 fileContent.close();
             }
         }
+        
         return "success";
     }
 }

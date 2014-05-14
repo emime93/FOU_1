@@ -12,6 +12,24 @@ package com.spring.tutorial.entitites;
  */
 public class User {
     private String username;
+    private String dropboxAccessToken;
+
+    public String getDropboxAccessToken() {
+        return dropboxAccessToken;
+    }
+
+    public void setDropboxAccessToken(String dropboxAccessToken) {
+        this.dropboxAccessToken = dropboxAccessToken;
+    }
+
+    public String getFacebookToken() {
+        return facebookToken;
+    }
+
+    public void setFacebookToken(String facebookToken) {
+        this.facebookToken = facebookToken;
+    }
+    private String facebookToken;
 
     public String getUsername() {
         return username;
@@ -38,4 +56,5 @@ public class User {
     }
     private String password;
     private String email;
+
 }

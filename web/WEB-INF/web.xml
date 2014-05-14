@@ -6,11 +6,11 @@
     </context-param>
     <filter>
         <filter-name>FOUFilter</filter-name>
-        <filter-class>com.spring.tutorial.entitites.FOUFilter</filter-class>
+        <filter-class>com.spring.tutorial.controllers.FOUFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>FOUFilter</filter-name>
-        <url-pattern>/WEB-INF/jsp/mydrive/*</url-pattern>
+        <url-pattern>/my-drive/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
@@ -32,6 +32,14 @@
         <servlet-name>DownloadServlet</servlet-name>
         <servlet-class>com.spring.tutorial.formHandlers.DownloadServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FacebookSignIn</servlet-name>
+        <servlet-class>com.spring.tutorial.facebook.FacebookSignIn</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FacebookCallback</servlet-name>
+        <servlet-class>com.spring.tutorial.facebook.FacebookCallback</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
@@ -40,7 +48,14 @@
         <servlet-name>UploadFile</servlet-name>
         <url-pattern>/my-drive/upload/file-upload</url-pattern>
     </servlet-mapping>
-  
+    <servlet-mapping>
+        <servlet-name>FacebookSignIn</servlet-name>
+        <url-pattern>/FacebookSignIn</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FacebookCallback</servlet-name>
+        <url-pattern>/FacebookCallback</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -49,8 +64,7 @@
     <jsp-config>
         <jsp-property-group>
             <description>header and footer settings</description>
-            <url-pattern>/index.jsp</url-pattern>
-            <url-pattern>/WEB-INF/jsp/*</url-pattern>
+            <url-pattern>/WEB-INF/jsp/mydrive/*</url-pattern>
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
             <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
         </jsp-property-group>

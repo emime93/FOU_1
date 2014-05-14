@@ -33,7 +33,11 @@ public class MongoDB {
         this.user = user;
     }
     private static boolean auth;
-    private static DB db;
+    private DB db;
+
+    public DB getDb() {
+        return db;
+    }
 
     public MongoDB(User user) {
         try {
@@ -42,14 +46,15 @@ public class MongoDB {
             db = mongoClient.getDB("fou");
 
             char[] pass = "mongo".toCharArray();
-            auth = db.authenticate("admin", pass);
+            auth = db.authenticate("emime", pass);
 
         } catch (UnknownHostException ex) {
             ex.printStackTrace();
         }
     }
 
-    public static boolean userExist() {
+    public boolean userExist() {
+        //return true if user doesn't exist
         if (auth) {
             DBCollection collection = db.getCollection("users");
             DBCursor cursor = collection.find();
@@ -63,28 +68,34 @@ public class MongoDB {
     }
 
     public boolean registerUser() {
-        if (userExist())
-        try {
-            BasicDBObject document = new BasicDBObject();
-            document.append("username", user.getUsername());
-            document.append("email", user.getEmail());
-            document.append("password", user.getPassword());
-            DBCollection collection = db.getCollection("users");
-            collection.insert(document);
-            return true;
-        } catch (Exception e) {
-            return false;
+        if (userExist()) {
+            try {
+
+                BasicDBObject document = new BasicDBObject();
+                document.append("username", user.getUsername());
+                document.append("email", user.getEmail());
+                document.append("password", user.getPassword());
+                document.append("dropbox_token", "");
+                document.append("facebook_token", user.getFacebookToken());
+
+                DBCollection collection = db.getCollection("users");
+                collection.insert(document);
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
         }
         return false;
     }
+
     public boolean checkUser() {
-         if (auth) {
+        if (auth) {
             DBCollection collection = db.getCollection("users");
             DBCursor cursor = collection.find();
             while (cursor.hasNext()) {
                 DBObject document = cursor.next();
-                if (document.get("username").equals(user.getUsername()) &&
-                    document.get("password").equals(user.getPassword())) {
+                if (document.get("username").equals(user.getUsername())
+                        && document.get("password").equals(user.getPassword())) {
                     return true;
                 }
             }
@@ -98,6 +109,5 @@ public class MongoDB {
             mongoClient.close();
         }
     }
-    
 
 }

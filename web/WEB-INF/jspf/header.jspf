@@ -6,70 +6,80 @@
         <meta charset="UTF-8" />
         <title>${title}</title>
     </head>
+
+    <link rel="stylesheet" type="text/css" href="<c:url value="/bootstrap3/css/bootstrap.css" />" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css" />" />
     <script src="<c:url value = "/js/dynamicProcess.js"/> ">
     </script>
+    <script src="<c:url value = "/js/jquery.js"/> "></script>
+    <script src="<c:url value = "/js/bootstrap.min.js"/> "></script>
     <body>
-        <nav class="nav-bar">
-            <ul>
-                <li style="float:left;"><a href=""><image src="<c:url value="/images/icons/download12.png" />" id="avatar-img"/></a></li>
-                <li><a><image src="<c:url value="/images/icons/user91.png" />" id="avatar-img"/></a>
-                        <c:if test="${empty username}">
-                        <ul>
-                            <li><a href="signup">sign up</a></li>
-                            <li><a href="login">login</a></li>
-                        </ul>
-                    </c:if>
-                    <c:if test="${not empty username}">
-                        <ul>
-                            <li><a>Welcome, ${username}</a></li>
-                            <li><a href="<c:url value="/logout" />">logout</a></li>
-                        </ul>
-                    </c:if>
-                </li>
-                <c:if test="${not empty username}">
-                    <li><a id="search-btn"><input placeholder="search"/><image src="<c:url value="/images/icons/magnifier12.png" />" id="avatar-img"/></a>
-                    </li>
-                </c:if>
-                    <li><a><image src="<c:url value="/images/icons/facebook12.png" />" id="avatar-img" /></a></li>
-            </ul>
-        </nav>
-        <c:if test="${not empty username}">
-            <section id="option-menu">
-                <div id="option-menu-title">
-                    <h3><a href="../my-drive">My drive</a></h3>
+        <nav class="navbar navbar-fixed-top navbar-default" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">FOU</a>
                 </div>
-                <ul>
-                    <li><a href="<c:url value="/my-drive/upload" />">
-                            <img class="menu-icon" src="<c:url value="/images/icons/cloud32.png" />"/>
-                            upload
-                        </a>
-                    </li>
-                    <li><a id="download">
-                            <img class="menu-icon" src="<c:url value="/images/icons/favorite.png" />"/>
-                            favorites
-                        </a>
-                    </li>
-                    <li><a>
-                            <img class="menu-icon" src="<c:url value="/images/icons/documents7.png" />"/>
-                            documents
-                        </a>
-                    </li>
-                    <li><a>
-                            <img class="menu-icon" src="<c:url value="/images/icons/images9.png" />"/>
-                            images
-                        </a>
-                    </li>
-                    <li><a>
-                            <img class="menu-icon" src="<c:url value="/images/icons/film9.png" />"/>
-                            videos
-                        </a>
-                    </li>
-                    <li><a>
-                            <img class="menu-icon" src="<c:url value="/images/icons/recycle2.png" />"/>
-                            trash
-                        </a>
-                    </li>
-                </ul>
-            </section>
-        </c:if>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <c:choose>
+                            <c:when test="${title.equals('my-drive')}"><li class="active"></c:when>
+                            <c:otherwise><li></c:otherwise>
+                        </c:choose>
+                        <a href="<c:url value="/my-drive" />"><img class="menu-icon" src="<c:url value="/images/icons/drive.png" />"/> &nbsp; My Drive</a></li>
+                        <c:choose>
+                            <c:when test="${title.equals('upload')}"><li class="active"></c:when>
+                            <c:otherwise><li></c:otherwise>
+                        </c:choose>
+                        <a href="<c:url value="/my-drive/upload" />"><img class="menu-icon" src="<c:url value="/images/icons/cloud32.png" />"/> &nbsp;  Upload</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">One more separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <c:choose>
+                            <c:when test="${title.equals('dropbox')}"><li class="active"></c:when>
+                            <c:otherwise><li></c:otherwise>
+                        </c:choose>
+                       <a href="<c:url value="/my-drive/dropbox/user-all" />">
+                           <img class="menu-icon" src="<c:url value="/images/icons/dropbox4.png" />"/> &nbsp;Dropbox
+                       </a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Hello, ${username}</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="<c:url value="/logout" />">Sign out</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+                                
+       

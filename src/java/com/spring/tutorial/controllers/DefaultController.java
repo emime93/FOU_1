@@ -3,6 +3,7 @@ package com.spring.tutorial.controllers;
 import com.dropbox.core.DbxAppInfo;
 import com.dropbox.core.DbxAuthFinish;
 import com.dropbox.core.DbxClient;
+import com.dropbox.core.DbxEntry;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.DbxSessionStore;
@@ -141,7 +142,7 @@ public class DefaultController {
 
         DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(session, sessionKey);
 
-        String redirectUri = "http://127.0.0.1:8080/FOU_1/dropbox-auth-finished";
+        String redirectUri = "http://localhost:8080/FOU_1/dropbox-auth-finished";
         auth = new DbxWebAuth(config, appInfo, redirectUri, csrfTokenStore);
 
         String authorizePageUrl = auth.start();
@@ -174,7 +175,7 @@ public class DefaultController {
         DbxAppInfo appInfo = new DbxAppInfo(APP_KEY, APP_SECRET);
 
         try {
-            String redirectUrl = getUrl(request, "http://127.0.0.1:8080/FOU_1/dropbox-auth-finished");
+            String redirectUrl = getUrl(request, "http://localhost:8080/FOU_1/dropbox-auth-finished");
 
             // Select a spot in the session for DbxWebAuth to store the CSRF token.
             HttpSession session = request.getSession();
@@ -190,7 +191,7 @@ public class DefaultController {
             return returnTo;
         } catch (DbxWebAuth.BadStateException ex) {
             // Send them back to the start of the auth flow.
-            response.sendRedirect("http://127.0.0.1:8080/FOU_1/my-drive" + ex.getMessage());
+            response.sendRedirect("http://localhost:8080/FOU_1/dropbox-auth-finished" + ex.getMessage());
             return returnTo;
         } catch (DbxWebAuth.CsrfException ex) {
             log("On /dropbox-auth-finish: CSRF mismatch: " + ex.getMessage());
@@ -211,6 +212,7 @@ public class DefaultController {
         String accessToken = authFinish.accessToken;
 
         DbxClient client = new DbxClient(config, accessToken);
+      
         MongoClient mongoClient = new MongoClient();
         DB db = mongoClient.getDB("fou");
 
@@ -228,25 +230,58 @@ public class DefaultController {
 
         map.addAttribute("title", "my-drive");
         request.getSession().setAttribute("dropbox_token", accessToken);
+        response.sendRedirect("http://localhost:8080/FOU_1/my-drive/dropbox/user-all");
         return "mydrive/dropbox";
     }
 
-    @RequestMapping(value = "/my-drive/dropbox/{path}", method = RequestMethod.GET)
-    public String dropbox(@PathVariable ("path") String path, HttpServletRequest request, ModelMap map) throws DbxException, IOException {
+    @RequestMapping(value = "/my-drive/dropbox/**", method = RequestMethod.GET)
+    public String dropbox(HttpServletRequest request, ModelMap map) throws DbxException, IOException {
+        String path = request.getServletPath().substring(request.getServletPath().indexOf("/my-drive/dropbox/") + 17);
+
         map.addAttribute("title", "dropbox");
-        if (!request.getSession().getAttribute("dropbox_token").equals("")) {
+        
+        HttpSession sessions = request.getSession();
+        
+        if (request.getSession().getAttribute("dropbox_token") != null) {
             config = new DbxRequestConfig(
                     "JavaTutorial/1.0", Locale.getDefault().toString());
             DbxClient client = new DbxClient(config, (String) request.getSession().getAttribute("dropbox_token"));
             DropBoxAuth dropBoxAuth = new DropBoxAuth();
             dropBoxAuth.authenticate((String) request.getSession().getAttribute("dropbox_token"));
-            if (path.equals("user-all"))
-               map.addAttribute("dropbox_entities", dropBoxAuth.getFilesAndFolders(client, "/"));
-            else 
-                map.addAttribute("dropbox_entities", dropBoxAuth.getFilesAndFolders(client, "/" + URLDecoder.decode(path)));
+            
+            if (path.equals("/user-all")) {
+                map.addAttribute("dropbox_entities", dropBoxAuth.getFilesAndFolders(client, "/"));
+            } else {
+                map.addAttribute("dropbox_entities", dropBoxAuth.getFilesAndFolders(client, "/" + URLDecoder.decode(path, "UTF-8")));
+            }
+            
             map.addAttribute("dropbox_username", client.getAccountInfo().displayName);
         }
         return "mydrive/dropbox";
+    }
+
+    @RequestMapping(value = "/my-drive/dropbox/downloads/**", method = RequestMethod.GET)
+    public String getDropboxFile(HttpServletRequest request, HttpServletResponse response) throws IOException, DbxException {
+
+        config = new DbxRequestConfig(
+                "JavaTutorial/1.0", Locale.getDefault().toString());
+        DbxClient client = new DbxClient(config, (String) request.getSession().getAttribute("dropbox_token"));
+
+        String path = request.getServletPath().substring(request.getServletPath().indexOf("/my-drive/dropbox/downloads/") + 27);
+        ServletOutputStream outputStream = response.getOutputStream();
+        try {
+            
+            DbxEntry.File downloadedFile = client.getFile(path, null,
+                    outputStream);
+            String mimeType = "application/octet-stream";
+            response.setContentType(mimeType);
+            response.setContentLength((int) downloadedFile.numBytes);
+            String headerKey = "Content-Disposition";
+            String headerValue = String.format("attachment; filename=\"%s\"",downloadedFile.name);
+        } finally {
+            outputStream.close();
+        }
+        return "";
     }
 
 }

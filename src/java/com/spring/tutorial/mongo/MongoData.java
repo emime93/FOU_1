@@ -24,7 +24,7 @@ public class MongoData {
         mongoClient = new MongoClient();
         db = mongoClient.getDB("fou");
         char[] pass = "mongo".toCharArray();
-        auth = db.authenticate("admin", pass);
+        auth = db.authenticate("emime", pass);
     }
     public DB getDB() throws Exception {
         if (auth == true)

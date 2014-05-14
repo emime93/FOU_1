@@ -6,6 +6,9 @@
 
 package com.spring.tutorial.formHandlers;
 
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.spring.tutorial.entitites.LoggedUser;
 import com.spring.tutorial.entitites.User;
 import com.spring.tutorial.mongo.MongoDB;
@@ -47,13 +50,24 @@ public class LoginController {
         _user.setUsername(user.getUsername());
         
         MongoDB mongo = new MongoDB(_user);
-        if (mongo.checkUser()) 
+        if (mongo.checkUser()) { 
             request.getSession().setAttribute("username", user.getUsername());
-        return "redirect:my-drive";
+            DBCollection collection = mongo.getDb().getCollection("users");
+            DBCursor cursor = collection.find();
+            while (cursor.hasNext()) {
+                DBObject document = cursor.next();
+                if (document.get("username").equals(user.getUsername()) &&
+                    document.get("password").equals(user.getPassword())) {
+                    request.getSession().setAttribute("dropbox_token", document.get("dropbox_token"));
+                }
+            }
+            return "redirect:my-drive";
+        }
+        return "redirect:signup";
     }
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request) {
         request.getSession().setAttribute("username", null);
-        return "redirect:/";
+        return "redirect:/login";
     }
 }
