@@ -1,7 +1,5 @@
 
-<script src="<c:url value = "/js/fileUpload.js"/> ">
-
-</script>
+<script src="<c:url value = "/js/fileUpload.js"/> "></script>
 <section id="file-system-container">
     <section id="file-system-container-top"></section>
     <section id="file-system-container-bottom">

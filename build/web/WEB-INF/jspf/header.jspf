@@ -9,7 +9,9 @@
 
     <link rel="stylesheet" type="text/css" href="<c:url value="/bootstrap3/css/bootstrap.css" />" />
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/style.css" />" />
-    <script src="<c:url value = "/js/dynamicProcess.js"/> ">
+    <link href="<c:url value="/css/bootstrap-notify.css" />" rel="stylesheet" />
+    <script src="<c:url value = "/js/bootstrap-notify.js"/> "></script>
+    <script src="<c:url value = "/js/dynamicProcess.js"/> " >
     </script>
     <script src="<c:url value = "/js/jquery.js"/> "></script>
     <script src="<c:url value = "/js/bootstrap.min.js"/> "></script>
@@ -39,7 +41,7 @@
                             <c:when test="${title.equals('upload')}"><li class="active"></c:when>
                             <c:otherwise><li></c:otherwise>
                         </c:choose>
-                        <a href="<c:url value="/my-drive/upload" />"><img class="menu-icon" src="<c:url value="/images/icons/cloud32.png" />"/> &nbsp;  Upload</a></li>
+                                <a type="button" data-toggle="modal" data-target="#my-modal" style="cursor:pointer;"><img class="menu-icon" src="<c:url value="/images/icons/cloud32.png" />"/> &nbsp;  Upload</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
                             <ul class="dropdown-menu">

@@ -1,2 +1,52 @@
+<div class='notifications bottom-right' id="alert-msg"></div>
+<div class="show-notification" id="show-notification" style="display:none;"></div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        
+    });
+</script>
+ <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://getbootstrap.com/2.3.2/assets/js/jquery.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/google-code-prettify/prettify.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-transition.js"></script>
+    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-notify.js"></script>
+    <script>
+      // Random Messages
+      var messages = [
+        [ 'bottom-right', 'info',     'Uploaded successfully :)']
+      ];
+
+      // Pretty print
+      window.prettyPrint && prettyPrint()
+
+      // Basic Features, style isn't even required.
+      $('.show-notification').click(function (e) {
+        var message = messages[Math.floor(Math.random() * messages.length)];
+        
+        $('.' + message[0]).notify({
+          message: { text: message[2] },
+          type: message[1]
+        }).show();
+      });
+      
+      /* Custom Styles */
+      var custom = [
+        'bangTidy',
+        'blackgloss'
+      ];
+      
+      for(var i = 0; i < custom.length; i++) {
+        var type = custom[i];
+        
+        (function(type) {
+          $('.show-' + type).click(function (e) {
+            var message = messages[Math.floor(Math.random() * messages.length)];
+            $('.' + message[0]).notify({ message: { text: message[2] }, type: type }).show();
+          });
+        })(type);
+      }
+    </script>
 </body>
 </html>

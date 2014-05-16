@@ -46,7 +46,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UploadFile</servlet-name>
-        <url-pattern>/my-drive/upload/file-upload</url-pattern>
+        <url-pattern>/my-drive/file-upload</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FacebookSignIn</servlet-name>
