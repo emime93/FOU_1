@@ -60,6 +60,8 @@ public class FacebookCallback extends HttpServlet {
                 else 
                 if (!mongoDB.userExist()) {
                     request.getSession().setAttribute("username", user.getUsername());
+                    mongoDB.getUserInfo();
+                    request.getSession().setAttribute("dropbox_token", user.getDropboxAccessToken());
                     response.sendRedirect(request.getContextPath() + "/my-drive");
                 }
 

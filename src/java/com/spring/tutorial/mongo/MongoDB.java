@@ -52,7 +52,19 @@ public class MongoDB {
             ex.printStackTrace();
         }
     }
-
+    public void getUserInfo() {
+        if (auth) {
+            DBCollection collection = db.getCollection("users");
+            DBCursor cursor = collection.find();
+            while (cursor.hasNext()) {
+                DBObject document = cursor.next();
+                
+                if (document.get("username").equals(user.getUsername())) {
+                    user.setDropboxAccessToken((String) document.get("dropbox_token"));
+                }
+            }
+        }
+    }
     public boolean userExist() {
         //return true if user doesn't exist
         if (auth) {

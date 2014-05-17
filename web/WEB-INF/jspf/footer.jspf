@@ -1,52 +1,85 @@
 <div class='notifications bottom-right' id="alert-msg"></div>
 <div class="show-notification" id="show-notification" style="display:none;"></div>
 <script type="text/javascript">
-    $(document).ready(function() {
-        
+    function getTableValues(value) {
+         $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/FOU_1/my-drive/search",
+            data: {tag: value}
+        }).done(function(msg) {
+            if (msg !== null) {
+                $("#files-table").empty();
+                $("#files-table").append("<tr /><td></td><td>Title</td><td>Size</td><td>Date</td>");
+                for (var i = 0; i < msg.length; ++i) {
+                    var array = msg[i];
+                    $("#files-table").append("<tr /><td ><img src=\"images/icons/star105.png\" style=\"width:25px;\"/></td><td ><span>" + array.title +
+                            "</span></td><td ><span>" + array.size +
+                            "</span></td><td ><span>" + array.date +
+                            "</span></td><td ><a href=\"files/" + array.downloadLink +
+                            "\"><img src=\"images/icons/download14.png\" style=\"width:25px;\" onmouseout=\"this.src = 'images/icons/download14.png'\"/></a></td>");
+                }
+            }
+        }).fail(function(msg) {
+        });
+    }
+    $("#close-upload-modal").click(function(){
+       getTableValues("all");
+    });
+    $("#search-box").keypress(function() {
+        var value = document.getElementById("search-box").value;
+        getTableValues(value);
     });
 </script>
- <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="http://getbootstrap.com/2.3.2/assets/js/jquery.js"></script>
-    <script src="http://getbootstrap.com/2.3.2/assets/js/google-code-prettify/prettify.js"></script>
-    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-transition.js"></script>
-    <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-alert.js"></script>
-    <script src="js/bootstrap-notify.js"></script>
-    <script>
-      // Random Messages
-      var messages = [
-        [ 'bottom-right', 'info',     'Uploaded successfully :)']
-      ];
+<script>!function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (!d.getElementById(id)) {
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "//platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }
+    }(document, "script", "twitter-wjs");</script>
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="http://getbootstrap.com/2.3.2/assets/js/jquery.js"></script>
+<script src="http://getbootstrap.com/2.3.2/assets/js/google-code-prettify/prettify.js"></script>
+<script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-transition.js"></script>
+<script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-alert.js"></script>
+<script src="js/bootstrap-notify.js"></script>
+<script>
+    // Random Messages
+    var messages = [
+        ['bottom-right', 'info', 'Uploaded successfully :)']
+    ];
 
-      // Pretty print
-      window.prettyPrint && prettyPrint()
+    // Pretty print
+    window.prettyPrint && prettyPrint()
 
-      // Basic Features, style isn't even required.
-      $('.show-notification').click(function (e) {
+    // Basic Features, style isn't even required.
+    $('.show-notification').click(function(e) {
         var message = messages[Math.floor(Math.random() * messages.length)];
-        
+
         $('.' + message[0]).notify({
-          message: { text: message[2] },
-          type: message[1]
+            message: {text: message[2]},
+            type: message[1]
         }).show();
-      });
-      
-      /* Custom Styles */
-      var custom = [
+    });
+
+    /* Custom Styles */
+    var custom = [
         'bangTidy',
         'blackgloss'
-      ];
-      
-      for(var i = 0; i < custom.length; i++) {
+    ];
+
+    for (var i = 0; i < custom.length; i++) {
         var type = custom[i];
-        
+
         (function(type) {
-          $('.show-' + type).click(function (e) {
-            var message = messages[Math.floor(Math.random() * messages.length)];
-            $('.' + message[0]).notify({ message: { text: message[2] }, type: type }).show();
-          });
+            $('.show-' + type).click(function(e) {
+                var message = messages[Math.floor(Math.random() * messages.length)];
+                $('.' + message[0]).notify({message: {text: message[2]}, type: type}).show();
+            });
         })(type);
-      }
-    </script>
+    }
+</script>
 </body>
 </html>

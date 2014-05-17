@@ -1,8 +1,9 @@
+ <link rel="stylesheet" type="text/css" href="<c:url value="/css/bootstrap-tagsinput.css" />" />
 <section id="file-system-container">
     <section id="file-system-container-top">
     </section>
     <section id="file-system-container-bottom">
-        <table class="table">
+        <table class="table" id="files-table">
             <tr />
             <td></td>
             <td>Title</td>
@@ -27,7 +28,6 @@
     </section>  
 
 </section>
-
 <script src="<c:url value = "/js/fileUpload.js"/> "></script>
 <div class="modal fade" id="my-modal">
     <div class="modal-dialog">
@@ -43,6 +43,7 @@
                         <input type="file" name="file" id="file" onchange="fileSelected();" class="upload"/>
                     </div>
                 </form>
+                <input type="text" value="" data-role="tagsinput" placeholder="Add tags" id="file-tags"/>
                 <div class="progress progress-striped active">
                     <div id="progress-bar-upload" class="progress-bar"  role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
                         <span class="sr-only">80% Complete</span>
@@ -61,3 +62,7 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<script src="<c:url value = "/js/bootstrap-tagsinput-angular.js"/> "></script>
+<script src="<c:url value = "/js/bootstrap-tagsinput.js"/> "></script>
+<script src="<c:url value = "/js/bootstrap-tagsinput.min.js"/> "></script>

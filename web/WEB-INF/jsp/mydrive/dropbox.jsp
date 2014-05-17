@@ -7,7 +7,7 @@
         <c:otherwise>
             <section id="file-system-container">
                 <section id="file-system-container-top">
-                    <h3>Welcome, ${dropbox_username}</h3>
+                    <h3>Welcome, ${dropbox_username} </h3>
                     <img src="<c:url value="/images/icons/cloud32.png" />"
                          onmouseover="this.src='<c:url value="/images/icons/cloud32_white.png" />'" 
                          onmouseout = "this.src='<c:url value="/images/icons/cloud32.png" />' "/>

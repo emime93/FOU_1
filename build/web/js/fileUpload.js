@@ -6,11 +6,14 @@
 
 function uploadFile() {
     var fd = new FormData();
-    fd.append("file", document.getElementById('file').files[0]);
-
+    var tags = document.getElementById("file-tags").value;
+    var file = document.getElementById('file').files[0];
+    fd.append("file", file);
+    fd.append("tags", tags);
     var xhr = new XMLHttpRequest();
 
     /* event listners */
+    
     xhr.upload.addEventListener("progress", uploadProgress, false);
     xhr.addEventListener("load", uploadComplete, false);
     xhr.addEventListener("error", uploadFailed, false);
@@ -21,6 +24,7 @@ function uploadFile() {
     }
     xhr.open("POST", "my-drive/file-upload");
     xhr.send(fd);
+ 
 }
 
 function fileSelected() {
@@ -65,6 +69,8 @@ function uploadComplete(evt) {
     document.getElementById('progress-bar-upload').style.width = "0%";
     document.getElementById("show-notification").click();
     document.getElementById("close-upload-modal").click();
+    document.getElementById("file-tags").value = "";
+   
 }
 
 function uploadFailed(evt) {

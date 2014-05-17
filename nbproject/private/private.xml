@@ -3,9 +3,25 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/src/java/com/spring/tutorial/controllers/DefaultController.java</file>
             <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/WEB-INF/jsp/mydrive/dropbox.jsp</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/WEB-INF/jsp/mydrive/upload.jsp</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/src/java/com/spring/tutorial/formHandlers/UploadFile.java</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/css/alert-bangtidy.css</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/js/bootstrap-notify.js</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/WEB-INF/jspf/footer.jspf</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/bootstrap3/js/bootstrap.js</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/WEB-INF/jspf/header.jspf</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/src/java/com/spring/tutorial/entitites/FileUploader.java</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/css/bootstrap-notify.css</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/js/fileUpload.js</file>
             <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/js/dynamicProcess.js</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/bootstrap3/css/bootstrap.css</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/js/bootstrap.min.js</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/src/java/com/spring/tutorial/formHandlers/UploadController.java</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/css/style.css</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/src/java/com/spring/tutorial/controllers/DefaultController.java</file>
+            <file>file:/C:/Users/Petricioiu/Documents/GitHub/FOU_1/web/WEB-INF/jsp/mydrive/mydrive.jsp</file>
         </group>
     </open-files>
 </project-private>

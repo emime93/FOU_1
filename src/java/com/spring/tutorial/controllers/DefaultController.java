@@ -31,6 +31,8 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import static java.rmi.server.LogStream.log;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,6 +48,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.portlet.ModelAndView;
 
 /*
@@ -59,101 +62,100 @@ import org.springframework.web.portlet.ModelAndView;
  */
 @Controller
 public class DefaultController {
-
+    
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(ModelMap map) {
-        map.addAttribute("title", "index");
-        return "index";
+        return "redirect:login";
     }
-
+    
     @RequestMapping(value = "/my-drive", method = RequestMethod.GET)
     public String myDrive(ModelMap map, HttpServletRequest request) {
         map.addAttribute("title", "my-drive");
         try {
-
+            
             MongoFileManager fileManager = new MongoFileManager(request.getSession().getAttribute("username").toString());
             map.addAttribute("files", fileManager.getFiles());
-
+            
         } catch (UnknownHostException ex) {
             ex.printStackTrace();
         }
-
+        
         return "mydrive/mydrive";
     }
-
+    
     @RequestMapping(value = "/files/{id}", method = RequestMethod.GET)
     public String getFile(@PathVariable("id") String id, ModelMap map,
             HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
-
+        
         String username = request.getSession().getAttribute("username").toString();
         MongoData data = new MongoData();
         GridFS collection = new GridFS(data.getDB(), username + "_files");
-
+        
         BasicDBObject query = new BasicDBObject();
         query.put("_id", new ObjectId(id));
         GridFSDBFile file = collection.findOne(query);
-
+        
         DBCollection metaFileCollection = data.getDB().getCollection(username + "_files_meta");
         BasicDBObject metaQuery = new BasicDBObject();
         metaQuery.put("file-id", new ObjectId(id));
         DBObject metaFileDoc = metaFileCollection.findOne(metaQuery);
         MongoFile metaFile = new MongoFile(metaFileDoc);
-
+        
         ServletOutputStream out = response.getOutputStream();
         String mimeType = metaFile.getType();
         response.setContentType(mimeType);
         response.setContentLength((int) file.getLength());
         String headerKey = "Content-Disposition";
-
+        
         File f = File.createTempFile(file.getFilename(), metaFile.getType().substring(metaFile.getType().indexOf("/") + 1));
         String headerValue = String.format("attachment; filename=\"%s\"",
                 file.getFilename());
         response.setHeader(headerKey, headerValue);
         file.writeTo(f);
-
+        
         FileInputStream inputStream = new FileInputStream(f);
         byte[] buffer = new byte[4096];
         int bytesRead = -1;
-
+        
         while (inputStream.read(buffer, 0, 4096) != -1) {
             out.write(buffer, 0, 4096);
         }
         inputStream.close();
         out.flush();
         out.close();
-
+        
         return "mydrive/temp";
     }
     DbxWebAuth auth = null;
     DbxRequestConfig config = null;
-
+    
     @RequestMapping(value = "/dropbox", method = RequestMethod.GET)
     public void sendAuthRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+        
         final String APP_KEY = "mt6yctmupgrodlm";
         final String APP_SECRET = "p68kiiyvdctftuv";
-
+        
         DbxAppInfo appInfo = new DbxAppInfo(APP_KEY, APP_SECRET);
-
+        
         config = new DbxRequestConfig(
                 "JavaTutorial/1.0", Locale.getDefault().toString());
         HttpSession session = request.getSession();
         String sessionKey = "dropbox-auth-csrf-token";
-
+        
         DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(session, sessionKey);
-
+        
         String redirectUri = "http://localhost:8080/FOU_1/dropbox-auth-finished";
         auth = new DbxWebAuth(config, appInfo, redirectUri, csrfTokenStore);
-
+        
         String authorizePageUrl = auth.start();
         response.sendRedirect(authorizePageUrl);
     }
-
+    
     public DbxRequestConfig getRequestConfig(HttpServletRequest request) {
         return new DbxRequestConfig(
                 "JavaTutorial/1.0", Locale.getDefault().toString());
     }
-
+    
     public String getUrl(HttpServletRequest request, String path) {
         URL requestUrl;
         try {
@@ -163,17 +165,17 @@ public class DefaultController {
             throw LangUtil.mkAssert("Bad URL", ex);
         }
     }
-
+    
     @RequestMapping(value = "/dropbox-auth-finished", method = RequestMethod.GET)
     public String authenticated(HttpServletResponse response, HttpServletRequest request, ModelMap map) throws DbxException, IOException {
-
+        
         DbxAuthFinish authFinish;
         String returnTo = "mydrive/mydrive";
         final String APP_KEY = "mt6yctmupgrodlm";
         final String APP_SECRET = "p68kiiyvdctftuv";
-
+        
         DbxAppInfo appInfo = new DbxAppInfo(APP_KEY, APP_SECRET);
-
+        
         try {
             String redirectUrl = getUrl(request, "http://localhost:8080/FOU_1/dropbox-auth-finished");
 
@@ -181,10 +183,10 @@ public class DefaultController {
             HttpSession session = request.getSession();
             String sessionKey = "dropbox-auth-csrf-token";
             DbxSessionStore csrfTokenStore = new DbxStandardSessionStore(session, sessionKey);
-
+            
             auth = new DbxWebAuth(getRequestConfig(request), appInfo, redirectUrl, csrfTokenStore);
             authFinish = auth.finish(request.getParameterMap());
-
+            
         } catch (DbxWebAuth.BadRequestException ex) {
             log("On /dropbox-auth-finish: Bad request: " + ex.getMessage());
             response.sendError(400);
@@ -197,7 +199,7 @@ public class DefaultController {
             log("On /dropbox-auth-finish: CSRF mismatch: " + ex.getMessage());
             return returnTo;
         } catch (DbxWebAuth.NotApprovedException ex) {
-
+            
             return returnTo;
         } catch (DbxWebAuth.ProviderException ex) {
             log("On /dropbox-auth-finish: Auth failed: " + ex.getMessage());
@@ -208,36 +210,36 @@ public class DefaultController {
             response.sendError(503, "Error communicating with Dropbox." + ex.getMessage());
             return returnTo;
         }
-
+        
         String accessToken = authFinish.accessToken;
-
+        
         DbxClient client = new DbxClient(config, accessToken);
-      
+        
         MongoClient mongoClient = new MongoClient();
         DB db = mongoClient.getDB("fou");
-
+        
         char[] pass = "mongo".toCharArray();
         boolean auth = db.authenticate("emime", pass);
         DBCollection collection = db.getCollection("users");
         if (auth == true) {
             BasicDBObject newDocument = new BasicDBObject();
             newDocument.append("$set", new BasicDBObject().append("dropbox_token", accessToken));
-
+            
             BasicDBObject searchQuery = new BasicDBObject().append("username", request.getSession().getAttribute("username"));
-
+            
             collection.update(searchQuery, newDocument);
         }
-
+        
         map.addAttribute("title", "my-drive");
         request.getSession().setAttribute("dropbox_token", accessToken);
         response.sendRedirect("http://localhost:8080/FOU_1/my-drive/dropbox/user-all");
         return "mydrive/dropbox";
     }
-
+    
     @RequestMapping(value = "/my-drive/dropbox/**", method = RequestMethod.GET)
     public String dropbox(HttpServletRequest request, ModelMap map) throws DbxException, IOException {
         String path = request.getServletPath().substring(request.getServletPath().indexOf("/my-drive/dropbox/") + 17);
-
+        
         map.addAttribute("title", "dropbox");
         
         HttpSession sessions = request.getSession();
@@ -259,14 +261,14 @@ public class DefaultController {
         }
         return "mydrive/dropbox";
     }
-
+    
     @RequestMapping(value = "/my-drive/dropbox/downloads/**", method = RequestMethod.GET)
     public String getDropboxFile(HttpServletRequest request, HttpServletResponse response) throws IOException, DbxException {
-
+        
         config = new DbxRequestConfig(
                 "JavaTutorial/1.0", Locale.getDefault().toString());
         DbxClient client = new DbxClient(config, (String) request.getSession().getAttribute("dropbox_token"));
-
+        
         String path = request.getServletPath().substring(request.getServletPath().indexOf("/my-drive/dropbox/downloads/") + 27);
         ServletOutputStream outputStream = response.getOutputStream();
         try {
@@ -277,11 +279,39 @@ public class DefaultController {
             response.setContentType(mimeType);
             response.setContentLength((int) downloadedFile.numBytes);
             String headerKey = "Content-Disposition";
-            String headerValue = String.format("attachment; filename=\"%s\"",downloadedFile.name);
+            String headerValue = String.format("attachment; filename=\"%s\"", downloadedFile.name);
         } finally {
             outputStream.close();
         }
         return "";
     }
 
+    @RequestMapping(value = "/my-drive/search", method = RequestMethod.GET)
+    public @ResponseBody
+    List<MongoFile> getSearchedFile(HttpServletRequest request) throws UnknownHostException, Exception {
+        String tag = request.getParameter("tag");
+        HttpSession session = request.getSession();
+        List<MongoFile> files = new ArrayList<>();
+        
+        MongoData mongoData = new MongoData();
+        DB db = mongoData.getDB();
+        DBCollection collection = db.getCollection(session.getAttribute("username") + "_files_meta");
+        DBCursor cursor = collection.find();
+        
+        while (cursor.hasNext()) {
+            DBObject document = cursor.next();
+            String[] tags = document.get("tags").toString().split(",");
+            if (document.get("name").toString().contains(tag) || tag.equals("all")) {
+                files.add(new MongoFile(document));
+            } else {
+                for (String oneTag : tags) {
+                    if (oneTag.contains(tag)) {
+                        files.add(new MongoFile(document));
+                    }
+                }
+            }
+            
+        }
+        return files;
+    }
 }
