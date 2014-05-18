@@ -7,7 +7,10 @@
 package com.spring.tutorial.entitites;
 
 import com.mongodb.DBObject;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import org.bson.types.ObjectId;
 
 /**
@@ -20,8 +23,25 @@ public class MongoFile {
     private String date;
     private String downloadLink;
     private String type;
-    private long size;
+    private String description;
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    private long size;
+    private List<String> tags;
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
     public long getSize() {
         return size;
     }
@@ -43,6 +63,12 @@ public class MongoFile {
         downloadLink = document.get("file-id").toString();
         type = (String) document.get("content-type");
         size = (long) document.get("size");
+        tags = new ArrayList<>();
+        String tagContainer = (String) document.get("tags");
+        String[] tagTokens = tagContainer.split(",");
+        description = (String) document.get("description");
+        tags.addAll(Arrays.asList(tagTokens));
+        
     }
     
     public String getTitle() {

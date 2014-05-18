@@ -314,4 +314,12 @@ public class DefaultController {
         }
         return files;
     }
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    public String delete(@PathVariable ("id") String id, HttpServletRequest request) throws UnknownHostException, Exception {
+        MongoData mongoData = new MongoData();
+        DB db = mongoData.getDB();
+        DBCollection collection = db.getCollection(request.getSession().getAttribute("username") + "_files_meta");
+        
+        return "mydrive/mydrive";
+    }
 }

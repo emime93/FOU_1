@@ -43,8 +43,6 @@ public class MongoFileManager {
                 MongoFile file = new MongoFile(document);
                 files.add(file);
             }
-                  
-             
             
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -54,9 +52,5 @@ public class MongoFileManager {
     public List<MongoFile> getFiles() {
         return files;
     }
-    
-
-    
-    
     
 }

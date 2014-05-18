@@ -2,28 +2,41 @@
 <div class="show-notification" id="show-notification" style="display:none;"></div>
 <script type="text/javascript">
     function getTableValues(value) {
-         $.ajax({
+        $.ajax({
             type: "GET",
             url: "http://localhost:8080/FOU_1/my-drive/search",
             data: {tag: value}
         }).done(function(msg) {
             if (msg !== null) {
-                $("#files-table").empty();
-                $("#files-table").append("<tr /><td></td><td>Title</td><td>Size</td><td>Date</td>");
+                $("#accordion").empty();
                 for (var i = 0; i < msg.length; ++i) {
                     var array = msg[i];
-                    $("#files-table").append("<tr /><td ><img src=\"images/icons/star105.png\" style=\"width:25px;\"/></td><td ><span>" + array.title +
-                            "</span></td><td ><span>" + array.size +
-                            "</span></td><td ><span>" + array.date +
-                            "</span></td><td ><a href=\"files/" + array.downloadLink +
-                            "\"><img src=\"images/icons/download14.png\" style=\"width:25px;\" onmouseout=\"this.src = 'images/icons/download14.png'\"/></a></td>");
+                    var description = array.description;
+                    var tagsContent = "";
+                    for (var j = 0; j < array.tags.length; ++j) {
+                        tagsContent += "&nbsp; <span class=\"label label-danger\">" + array.tags[j] + "</span>";
+                    }
+                    
+                    $("#accordion").append("<div class=\"panel panel-default\"><div class=\"panel-heading\">" +
+                            "<h4 class=\"panel-title\"><a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#" + array.downloadLink + "\">" +
+                            array.title + "</a></h4></div><div id=\"" + array.downloadLink + "\" class=\"panel-collapse collapse\">" +
+                            "<div class=\"panel-body\"><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
+                            "<div class=\"panel panel-default\"><div class=\"panel-heading\">Tags</div><div class=\"panel-body\">" + 
+                            tagsContent +
+                            "</div></div></div></div><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
+                            "<div class=\"panel panel-default\"><div class=\"panel-heading\">Description</div><div class=\"panel-body\">"
+                            +description + "</div></div></div></div><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
+                            "<div class=\"panel panel-default\" style=\"min-width:200px;\"><div class=\"panel-heading\">Last modified: " + array.date + "</div>" +
+                            "<div class=\"panel-body\"><ul class=\"nav nav-pills nav-stacked\"><li class=\"active\"><a href=\"files/" + array.downloadLink + "\">Download</a></li>" +
+                            "<li><a href=\"delete/" + array.downloadLink + "\">Delete</a></li></ul></div></div></div></div></div></div></div>");
+                    
                 }
             }
         }).fail(function(msg) {
         });
     }
-    $("#close-upload-modal").click(function(){
-       getTableValues("all");
+    $("#close-upload-modal").click(function() {
+        getTableValues("all");
     });
     $("#search-box").keypress(function() {
         var value = document.getElementById("search-box").value;

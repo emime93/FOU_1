@@ -87,6 +87,7 @@ public class FileUploader {
             metaDocument.append("content-type", filePart.getContentType());
             metaDocument.append("file-id", gfsInputFile.getId());
             metaDocument.append("tags", request.getParameter("tags"));
+            metaDocument.append("description", request.getParameter("description"));
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 

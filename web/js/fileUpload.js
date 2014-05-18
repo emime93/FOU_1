@@ -7,9 +7,11 @@
 function uploadFile() {
     var fd = new FormData();
     var tags = document.getElementById("file-tags").value;
+    var description = document.getElementById("file-description").value;
     var file = document.getElementById('file').files[0];
     fd.append("file", file);
     fd.append("tags", tags);
+    fd.append("description", description);
     var xhr = new XMLHttpRequest();
 
     /* event listners */
@@ -18,10 +20,7 @@ function uploadFile() {
     xhr.addEventListener("load", uploadComplete, false);
     xhr.addEventListener("error", uploadFailed, false);
     xhr.addEventListener("abort", uploadCanceled, false);
-    /* Be sure to change the url below to the url of your upload server side script */
-    if (xhr.readyState == 4 && xhr.status == 200) {
-
-    }
+    
     xhr.open("POST", "my-drive/file-upload");
     xhr.send(fd);
  
