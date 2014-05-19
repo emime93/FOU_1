@@ -35,16 +35,16 @@
                         <c:choose>
                             <c:when test="${title.equals('my-drive')}"><li class="active"></c:when>
                             <c:otherwise><li></c:otherwise>
-                        </c:choose>
-                        <a href="<c:url value="/my-drive" />"><img class="menu-icon" src="<c:url value="/images/icons/drive.png" />"/> &nbsp; My Drive</a></li>
-                        <c:choose>
-                            <c:when test="${title.equals('upload')}"><li class="active"></c:when>
+                            </c:choose>
+                            <a href="<c:url value="/my-drive" />"><img class="menu-icon" src="<c:url value="/images/icons/drive.png" />"/> &nbsp; My Drive</a></li>
+                                <c:choose>
+                                    <c:when test="${title.equals('upload')}"><li class="active"></c:when>
                             <c:otherwise><li></c:otherwise>
-                        </c:choose>
-                                <a type="button" data-toggle="modal" data-target="#my-modal" style="cursor:pointer;">
-                                    <img class="menu-icon" src="<c:url value="/images/icons/cloud32.png" />"/> &nbsp;  Upload
-                                </a>
-                            </li>
+                            </c:choose>
+                            <a type="button" data-toggle="modal" data-target="#my-modal" style="cursor:pointer;">
+                                <img class="menu-icon" src="<c:url value="/images/icons/cloud32.png" />"/> &nbsp;  Upload
+                            </a>
+                        </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
                             <ul class="dropdown-menu">
@@ -58,7 +58,8 @@
                             </ul>
                         </li>
                     </ul>
-                    <form class="navbar-form navbar-left" role="search" onsubmit="return false;">
+                    <form class="navbar-form navbar-left" role="search" onsubmit="r
+            eturn false;">
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="Search" id="search-box"  />
                         </div>
@@ -67,17 +68,16 @@
                         <c:choose>
                             <c:when test="${title.equals('dropbox')}"><li class="active"></c:when>
                             <c:otherwise><li></c:otherwise>
-                        </c:choose>
-                       <a href="<c:url value="/my-drive/dropbox/user-all" />">
-                           <img class="menu-icon" src="<c:url value="/images/icons/dropbox4.png" />"/> &nbsp;Dropbox
-                       </a></li>
+                            </c:choose>
+                            <a href="<c:url value="/my-drive/dropbox/user-all" />">
+                                <img class="menu-icon" src="<c:url value="/images/icons/dropbox4.png" />"/> &nbsp;Dropbox
+                            </a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings<b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="#">Hello, ${username}</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
                                 <li class="divider"></li>
+                                <li><a href="#">Another action</a></li>
                                 <li><a href="<c:url value="/logout" />">Sign out</a></li>
                             </ul>
                         </li>
@@ -85,5 +85,4 @@
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
-                                
-       
+

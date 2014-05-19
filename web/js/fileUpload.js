@@ -9,21 +9,37 @@ function uploadFile() {
     var tags = document.getElementById("file-tags").value;
     var description = document.getElementById("file-description").value;
     var file = document.getElementById('file').files[0];
-    fd.append("file", file);
-    fd.append("tags", tags);
-    fd.append("description", description);
-    var xhr = new XMLHttpRequest();
 
-    /* event listners */
-    
-    xhr.upload.addEventListener("progress", uploadProgress, false);
-    xhr.addEventListener("load", uploadComplete, false);
-    xhr.addEventListener("error", uploadFailed, false);
-    xhr.addEventListener("abort", uploadCanceled, false);
-    
-    xhr.open("POST", "my-drive/file-upload");
-    xhr.send(fd);
- 
+    if (file == null || tags == "" || description == "")
+        alert("please add all the required info");
+    else {
+        fd.append("file", file);
+        fd.append("tags", tags);
+        fd.append("description", description);
+        var xhr = new XMLHttpRequest();
+
+        /* event listners */
+
+        xhr.upload.addEventListener("progress", uploadProgress, false);
+        xhr.addEventListener("load", uploadComplete, false);
+        xhr.addEventListener("error", uploadFailed, false);
+        xhr.addEventListener("abort", uploadCanceled, false);
+
+        xhr.open("POST", "my-drive/file-upload");
+        xhr.send(fd);
+    }
+
+}
+function deleteFile(fileID) {
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/FOU_1/my-drive/delete",
+        data: {fileID: fileID}
+    }).done(function(msg) {
+        getTableValues("all");
+    }).fail(function(msg) {
+        alert("error:" + msg);
+    });
 }
 
 function fileSelected() {
@@ -69,7 +85,7 @@ function uploadComplete(evt) {
     document.getElementById("show-notification").click();
     document.getElementById("close-upload-modal").click();
     document.getElementById("file-tags").value = "";
-   
+
 }
 
 function uploadFailed(evt) {

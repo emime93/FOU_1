@@ -18,7 +18,7 @@
                                     <div class="panel-heading">Tags</div>
                                     <div class="panel-body">
                                         <c:forEach var="tag" items="${file.tags}">
-                                            <span class="label label-danger">${tag}</span>
+                                            <span class="label label-danger" style="display:block;float:left;margin:10px 0 0 2px;">${tag}</span>
                                         </c:forEach>
                                     </div>
                                 </div>
@@ -41,7 +41,7 @@
                                     <div class="panel-body">
                                         <ul class="nav nav-pills nav-stacked">
                                             <li class="active"><a href="files/${file.downloadLink}">Download</a></li>
-                                            <li><a href="#">Delete</a></li>
+                                            <li style="cursor:pointer;" onmousedown="deleteFile('${file.downloadLink}')"><a>Delete</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -65,7 +65,7 @@
                 <form id="form1" enctype="multipart/form-data" method="POST">
                     <div class="fileUpload">
                         <button type="button" class="btn btn-primary">choose file</button>
-                        <input type="file" name="file" id="file" onchange="fileSelected();" class="upload"/>
+                        <input type="file" name="file" id="file" onchange="fileSelected();" class="upload" required="required"/>
                     </div>
                 </form>
                 <div class="panel panel-default" style="min-width:200px;">

@@ -15,7 +15,16 @@ public class DropboxEntity {
     private String size;
     private String lastModified;
     private String path;
+    private String rev;
 
+    public String getRev() {
+        return rev;
+    }
+
+    public void setRev(String rev) {
+        this.rev = rev;
+    }
+    
     public String getPath() {
         return path;
     }
@@ -44,12 +53,13 @@ public class DropboxEntity {
         this.type = type;
         this.path = path;
     }
-    public DropboxEntity(String name, String type, String size, String lastModified, String path) {
+    public DropboxEntity(String name, String type, String size, String lastModified, String path, String rev) {
         this.name = name;
         this.type = type;
         this.size = size;
         this.lastModified = lastModified;
         this.path = path;
+        this.rev = rev;
     }
 
     @Override

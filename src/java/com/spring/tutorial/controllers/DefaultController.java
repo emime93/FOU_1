@@ -314,12 +314,26 @@ public class DefaultController {
         }
         return files;
     }
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String delete(@PathVariable ("id") String id, HttpServletRequest request) throws UnknownHostException, Exception {
+    
+    @RequestMapping(value = "/my-drive/delete", method = RequestMethod.POST)
+    public @ResponseBody String delete(HttpServletRequest request) throws UnknownHostException, Exception {
         MongoData mongoData = new MongoData();
         DB db = mongoData.getDB();
         DBCollection collection = db.getCollection(request.getSession().getAttribute("username") + "_files_meta");
+       
+        BasicDBObject document = new BasicDBObject();
+        String fileID = request.getParameter("fileID").toString();
+        document.put("file-id", new ObjectId(fileID));
+        collection.remove(document);
         
-        return "mydrive/mydrive";
+        document = new BasicDBObject();
+        GridFS gfs = new GridFS(db,request.getSession().getAttribute("username").toString() + "_files.files");
+        document.put("_id", new ObjectId(fileID));
+        gfs.remove(document);
+        
+        
+        collection.remove(document);
+        
+        return fileID;
     }
 }

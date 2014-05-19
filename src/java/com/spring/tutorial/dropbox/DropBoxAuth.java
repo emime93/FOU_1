@@ -47,9 +47,10 @@ public class DropBoxAuth {
             String fileInfo = child.toString();
             DropboxEntity entity;
             if (child.isFile()) {
+                String rev = fileInfo.substring(fileInfo.indexOf("rev=") + 5,fileInfo.indexOf(")") - 1);
                 String fileSize = fileInfo.substring(fileInfo.indexOf("humanSize=") + 11,fileInfo.indexOf("\", lastModified"));
-                String fileLastModified = fileInfo.substring(fileInfo.indexOf("lastModified=") + 14,fileInfo.indexOf("\", clientMtime"));
-                entity = new DropboxEntity(child.name, "file", fileSize, fileLastModified, child.path);
+                String fileLastModified = fileInfo.substring(fileInfo.indexOf("lastModified=") + 14,fileInfo.indexOf("\", clientMtime")); 
+                entity = new DropboxEntity(child.name, "file", fileSize, fileLastModified, child.path, rev);
             }
             else {
                 entity = new DropboxEntity(child.name, "folder", child.path);
