@@ -19,6 +19,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.spring.tutorial.dropbox.DropBoxAuth;
+import com.spring.tutorial.dropbox.DropboxEntityFactory;
 import com.spring.tutorial.entitites.MongoFile;
 import com.spring.tutorial.entitites.MongoFileManager;
 import com.spring.tutorial.mongo.MongoData;
@@ -237,27 +238,29 @@ public class DefaultController {
     }
     
     @RequestMapping(value = "/my-drive/dropbox/**", method = RequestMethod.GET)
-    public String dropbox(HttpServletRequest request, ModelMap map) throws DbxException, IOException {
+    public String dropbox(HttpServletRequest request, ModelMap map) throws DbxException, IOException, Exception {
         String path = request.getServletPath().substring(request.getServletPath().indexOf("/my-drive/dropbox/") + 17);
         
         map.addAttribute("title", "dropbox");
         
-        HttpSession sessions = request.getSession();
+        HttpSession session = request.getSession();
         
         if (request.getSession().getAttribute("dropbox_token") != null) {
             config = new DbxRequestConfig(
                     "JavaTutorial/1.0", Locale.getDefault().toString());
-            DbxClient client = new DbxClient(config, (String) request.getSession().getAttribute("dropbox_token"));
-            DropBoxAuth dropBoxAuth = new DropBoxAuth();
-            dropBoxAuth.authenticate((String) request.getSession().getAttribute("dropbox_token"));
+//            DbxClient client = new DbxClient(config, (String) request.getSession().getAttribute("dropbox_token"));
+//            DropBoxAuth dropBoxAuth = new DropBoxAuth();
+//            dropBoxAuth.authenticate((String) request.getSession().getAttribute("dropbox_token"));
+            DropboxEntityFactory dbxFactory = new DropboxEntityFactory();
             
             if (path.equals("/user-all")) {
-                map.addAttribute("dropbox_entities", dropBoxAuth.getFilesAndFolders(client, "/"));
+               // dropBoxAuth.fetchFilesAndFolders((String) session.getAttribute("username"), client, "/");
+                map.addAttribute("dropbox_entities", dbxFactory.getFilesAndFolders((String) session.getAttribute("username"),"/"));
             } else {
-                map.addAttribute("dropbox_entities", dropBoxAuth.getFilesAndFolders(client, "/" + URLDecoder.decode(path, "UTF-8")));
+                map.addAttribute("dropbox_entities", dbxFactory.getFilesAndFolders((String) session.getAttribute("username"), URLDecoder.decode(path, "UTF-8") + "/"));
             }
             
-            map.addAttribute("dropbox_username", client.getAccountInfo().displayName);
+          //  map.addAttribute("dropbox_username", client.getAccountInfo().displayName);
         }
         return "mydrive/dropbox";
     }

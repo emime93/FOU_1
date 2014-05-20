@@ -26,8 +26,6 @@ import java.util.logging.Logger;
  */
 public class MongoFileManager {
     
-    
-    
     private DBCollection collection;
     private List<MongoFile> files;
     

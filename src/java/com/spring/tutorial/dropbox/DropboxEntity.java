@@ -6,6 +6,8 @@
 
 package com.spring.tutorial.dropbox;
 
+import com.mongodb.DBObject;
+
 /**
  *
  * @author Petricioiu
@@ -60,6 +62,14 @@ public class DropboxEntity {
         this.lastModified = lastModified;
         this.path = path;
         this.rev = rev;
+    }
+    public DropboxEntity (DBObject doc) {
+        this.name = (String) doc.get("name");
+        this.type = (String) doc.get("type");
+        this.size = (String) doc.get("fileSize");
+        this.lastModified = (String) doc.get("lastModified");
+        this.path = (String) doc.get("path");
+        this.rev = (String) doc.get("rev");
     }
 
     @Override
