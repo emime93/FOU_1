@@ -5,31 +5,59 @@
         $.ajax({
             type: "GET",
             url: "http://localhost:8080/FOU_1/my-drive/search",
-            data: {tag: value}
+            data: {tag: value, url: document.title}
         }).done(function(msg) {
+
             if (msg !== null) {
                 $("#accordion").empty();
                 for (var i = 0; i < msg.length; ++i) {
                     var array = msg[i];
-                    var description = array.description;
-                    var tagsContent = "";
-                    for (var j = 0; j < array.tags.length; ++j) {
-                        tagsContent += "&nbsp; <span class=\"label label-danger\">" + array.tags[j] + "</span>";
+                    if (document.title == "my-drive") {
+                        var description = array.description;
+                        var tagsContent = "";
+                        for (var j = 0; j < array.tags.length; ++j) {
+                            tagsContent += "&nbsp; <span class=\"label label-danger\">" + array.tags[j] + "</span>";
+                        }
+
+                        $("#accordion").append("<div class=\"panel panel-default\"><div class=\"panel-heading\">" +
+                                "<h4 class=\"panel-title\"><a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#" + array.downloadLink + "\">" +
+                                array.title + "</a></h4></div><div id=\"" + array.downloadLink + "\" class=\"panel-collapse collapse\">" +
+                                "<div class=\"panel-body\"><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
+                                "<div class=\"panel panel-default\"><div class=\"panel-heading\">Tags</div><div class=\"panel-body\">" +
+                                tagsContent +
+                                "</div></div></div></div><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
+                                "<div class=\"panel panel-default\"><div class=\"panel-heading\">Description</div><div class=\"panel-body\">"
+                                + description + "</div></div></div></div><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
+                                "<div class=\"panel panel-default\" style=\"min-width:200px;\"><div class=\"panel-heading\">Last modified: " + array.date + "</div>" +
+                                "<div class=\"panel-body\"><ul class=\"nav nav-pills nav-stacked\"><li class=\"active\"><a href=\"files/" + array.downloadLink + "\">Download</a></li>" +
+                                "<li style=\"cursor:pointer;\" onmousedown=\"deleteFile('" + array.downloadLink + "')\"><a>Delete</a></li></li></ul></div></div></div></div></div></div></div>");
+                    } else {
+                        tagsContent = "";
+                        description = "";
+                        var linkOptions;
+                        var titleID = array.rev;
+                        if (array.type === "folder"){
+                            titlePath = "../dropbox" + array.path;
+                            linkOptions = "";
+                        }
+                        else {
+                            titlePath = "#" + array.rev;
+                            linkOptions = "data-toggle='collapse' data-parent='#accordion'";
+                        }
+                        $("#accordion").append("<div class=\"panel panel-default\"><div class=\"panel-heading\">" +
+                                "<h4 class=\"panel-title\"><a " + linkOptions + " href=\"" + titlePath + "\">" +
+                                array.name + "</a></h4></div><div id=\"" + titleID + "\" class=\"panel-collapse collapse\">" +
+                                "<div class=\"panel-body\"><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
+                                "<div class=\"panel panel-default\"><div class=\"panel-heading\">Tags</div><div class=\"panel-body\">" +
+                                tagsContent +
+                                "</div></div></div></div><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
+                                "<div class=\"panel panel-default\"><div class=\"panel-heading\">Description</div><div class=\"panel-body\">"
+                                + description + "</div></div></div></div><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
+                                "<div class=\"panel panel-default\" style=\"min-width:200px;\"><div class=\"panel-heading\">Last modified: " + array.lastModified + "</div>" +
+                                "<div class=\"panel-body\"><ul class=\"nav nav-pills nav-stacked\"><li class=\"active\"><a href=\"downloads" + array.path + "\">Download</a></li>" +
+                                "<li style=\"cursor:pointer;\" onmousedown=\"deleteFile('" + array.path + "')\"><a>Delete</a></li></li></ul></div></div></div></div></div></div></div>");
+                    
                     }
-                    
-                    $("#accordion").append("<div class=\"panel panel-default\"><div class=\"panel-heading\">" +
-                            "<h4 class=\"panel-title\"><a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#" + array.downloadLink + "\">" +
-                            array.title + "</a></h4></div><div id=\"" + array.downloadLink + "\" class=\"panel-collapse collapse\">" +
-                            "<div class=\"panel-body\"><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
-                            "<div class=\"panel panel-default\"><div class=\"panel-heading\">Tags</div><div class=\"panel-body\">" + 
-                            tagsContent +
-                            "</div></div></div></div><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
-                            "<div class=\"panel panel-default\"><div class=\"panel-heading\">Description</div><div class=\"panel-body\">"
-                            +description + "</div></div></div></div><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
-                            "<div class=\"panel panel-default\" style=\"min-width:200px;\"><div class=\"panel-heading\">Last modified: " + array.date + "</div>" +
-                            "<div class=\"panel-body\"><ul class=\"nav nav-pills nav-stacked\"><li class=\"active\"><a href=\"files/" + array.downloadLink + "\">Download</a></li>" +
-                            "<li style=\"cursor:pointer;\" onmousedown=\"deleteFile('" + array.downloadLink +"')\"><a>Delete</a></li></li></ul></div></div></div></div></div></div></div>");
-                    
                 }
             }
         }).fail(function(msg) {

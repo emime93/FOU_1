@@ -1,11 +1,16 @@
 <section class="container-fluid" style="max-width:900px;background-color: #fff;">
+    <ol class="breadcrumb" style="margin-top:60px;margin-bottom:0px;">
+        <c:forEach var="link" items = "${url_path}">
+        <li><a href="<c:url value="/my-drive/dropbox/${link}" />">${link}</a></li>
+        </c:forEach>
+    </ol>
     <c:choose>
         <c:when test="${dropbox_token == null}">
             <img src="<c:url value="/images/icons/dropbox_icon.ico" />" style="position:absolute;top:50%;left:50%;margin:-150px 0 0 -125px;"/>
             <a href="<c:url value="/dropbox" />"><button type="button" class="btn btn-primary success" style="position:absolute;top:50%;left:50%;margin:100px 0 0 -50px;">Link account</button></a>
         </c:when>
         <c:otherwise>
-            <div class="panel-group" id="accordion" style="margin-top:60px;">
+            <div class="panel-group" id="accordion" style="margin-top:10px;">
                 <c:forEach var="file" items = "${dropbox_entities}" >
                     <div class="panel panel-default">
                         <div class="panel-heading">

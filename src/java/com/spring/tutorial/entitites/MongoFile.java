@@ -17,7 +17,7 @@ import org.bson.types.ObjectId;
  *
  * @author petricioiurobert
  */
-public class MongoFile {
+public class MongoFile extends FOUFile{
     
     private String title;
     private String date;
@@ -32,6 +32,7 @@ public class MongoFile {
     public void setDescription(String description) {
         this.description = description;
     }
+    
     private long size;
     private List<String> tags;
 
@@ -42,7 +43,8 @@ public class MongoFile {
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
-    public long getSize() {
+    
+    public long getSizeLong() {
         return size;
     }
 
@@ -50,13 +52,6 @@ public class MongoFile {
         this.size = size;
     }
 
-    public MongoFile() {
-        title = "test";
-        date = "12 jun";
-        downloadLink = "//";
-        type = "text/css";
-        size=2;
-    }
     public MongoFile(DBObject document) {
         title = (String) document.get("name");
         date = (String) document.get("last_modified");

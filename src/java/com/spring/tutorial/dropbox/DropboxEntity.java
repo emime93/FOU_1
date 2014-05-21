@@ -7,44 +7,54 @@
 package com.spring.tutorial.dropbox;
 
 import com.mongodb.DBObject;
+import com.spring.tutorial.entitites.FOUFile;
 
 /**
  *
  * @author Petricioiu
  */
-public class DropboxEntity {
+public class DropboxEntity extends FOUFile{
+    
     private String name;
     private String size;
     private String lastModified;
     private String path;
     private String rev;
 
+    @Override
     public String getRev() {
         return rev;
     }
 
+    @Override
     public void setRev(String rev) {
         this.rev = rev;
     }
     
+    @Override
     public String getPath() {
         return path;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public String getSize() {
         return size;
     }
 
+    @Override
     public String getLastModified() {
         return lastModified;
     }
+    @Override
     public void setType(String type) {
         this.type = type;
     }
+    @Override
     public String getType() {
         return type;
     }
