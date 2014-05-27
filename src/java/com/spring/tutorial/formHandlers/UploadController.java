@@ -34,4 +34,11 @@ public class UploadController {
         return "mydrive/upload";
     }
     
+    @RequestMapping(value = "/my-drive/fileupload", method = RequestMethod.POST) 
+    public @ResponseBody String dropboxUpload(ModelMap map) {
+        String boom = "boom";
+        int x = 2;
+        return "";
+    }
+    
 }

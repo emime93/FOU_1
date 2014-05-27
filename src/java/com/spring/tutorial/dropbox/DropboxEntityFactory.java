@@ -26,10 +26,10 @@ public class DropboxEntityFactory {
         dropboxFiles = new ArrayList<>();
     }
 
-    public List<DropboxEntity> getFilesAndFolders(String user, String path) throws UnknownHostException, Exception {
+    public List<DropboxEntity> getFilesAndFolders(String id, String path) throws UnknownHostException, Exception {
         MongoData mongoData = new MongoData();
         DB db = mongoData.getDB();
-        DBCollection collection = db.getCollection(user + "_dropbox_files_meta");
+        DBCollection collection = db.getCollection(id + "_dropbox_files_meta");
         DBCursor cursor = collection.find();
 
         while (cursor.hasNext()) {

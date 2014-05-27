@@ -39,7 +39,7 @@
                             <a href="<c:url value="/my-drive" />"><img class="menu-icon" src="<c:url value="/images/icons/drive.png" />"/> &nbsp; My Drive</a></li>
                                 <c:choose>
                                     <c:when test="${title.equals('upload')}"><li class="active"></c:when>
-                            <c:otherwise><li></c:otherwise>
+                            <c:otherwise><li onmousedown="var url = document.URL; document.getElementById('edit-title').innerHTML = url.substr(44,url.length);"></c:otherwise>
                             </c:choose>
                             <a type="button" data-toggle="modal" data-target="#my-modal" style="cursor:pointer;">
                                 <img class="menu-icon" src="<c:url value="/images/icons/cloud32.png" />"/> &nbsp;  Upload

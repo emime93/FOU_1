@@ -6,6 +6,7 @@
 package com.spring.tutorial.dropbox;
 
 import com.dropbox.core.*;
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -45,11 +46,62 @@ public class DropBoxAuth {
 
     }
 
-    public void fetchFilesAndFolders(String user, DbxClient client, String path) throws DbxException, UnknownHostException, Exception {
-      
+    public void getDropboxPaths(String id, List<String> paths, String path) throws DbxException, UnknownHostException, Exception {
+
+        DbxEntry.WithChildren listing = client.getMetadataWithChildren(path);
+        for (DbxEntry child : listing.children) {
+            if (child.isFolder()) {
+                getDropboxPaths(id, paths, child.path);
+            }
+            paths.add(child.path);
+        }
+
         MongoData mongoData = new MongoData();
         DB db = mongoData.getDB();
-        DBCollection collection = db.getCollection(user + "_dropbox_files_meta");
+        DBCollection collection = db.getCollection("users");
+        
+        DBObject document = new BasicDBObject();
+        document.put("dropbox_hash",listing.hash);
+        
+        BasicDBObject newDocument = new BasicDBObject();
+        newDocument.append("$set", document);
+        BasicDBObject searchQuery = new BasicDBObject().append("id",id);
+        collection.update(searchQuery, newDocument);
+
+    }
+
+    public void removeJunk(String id, DbxClient client, String path) throws UnknownHostException, Exception {
+
+        List<String> paths = new ArrayList<>();
+        getDropboxPaths(id, paths, "/");
+
+        MongoData mongoData = new MongoData();
+        DB db = mongoData.getDB();
+        DBCollection collection = db.getCollection(id + "_dropbox_files_meta");
+        DBCursor cursor = collection.find();
+
+        if (cursor.count() != 0) {
+            while (cursor.hasNext()) {
+                boolean found = false;
+                DBObject doc = cursor.next();
+                for (String onePath : paths) {
+                    if (doc.get("path").equals(onePath)) {
+                        found = true;
+                    }
+                }
+                if (found == false) {
+                    collection.remove(doc);
+                }
+            }
+        }
+    }
+
+    public void fetchFilesAndFolders(String id, DbxClient client, String path) throws DbxException, UnknownHostException, Exception {
+
+        MongoData mongoData = new MongoData();
+        DB db = mongoData.getDB();
+        DBCollection collection = db.getCollection(id + "_dropbox_files_meta");
+        DBCursor cursor = collection.find();
 
         DbxEntry.WithChildren listing = client.getMetadataWithChildren(path);
 
@@ -71,12 +123,13 @@ public class DropBoxAuth {
                 document.put("path", child.path);
                 document.put("type", "file");
 
-                DBCursor cursor = collection.find();
+                cursor = collection.find();
                 boolean found = false;
 
                 while (cursor.hasNext()) {
                     DBObject doc = cursor.next();
-                    if (doc.get("path").equals(child.path)) {
+                    String path1 = (String) doc.get("path");
+                    if (path1.equals(child.path)) {
                         found = true;
                     }
                 }
@@ -87,18 +140,16 @@ public class DropBoxAuth {
                     newDocument.append("$set", document);
                     BasicDBObject searchQuery = new BasicDBObject().append("path", child.path);
                     collection.update(searchQuery, newDocument);
-                    BasicDBObject documentToUpdate = new BasicDBObject();
-                    documentToUpdate.put("found", "false");
-                    collection.remove(documentToUpdate);
-                }
-                else {
+                } else {
+                    document.put("tags", "");
+                    document.put("description", "");
                     document.put("found", "false");
                     collection.insert(document);
                 }
-                
+
             } else {
                 entity = new DropboxEntity(child.name, "folder", child.path);
-                
+
                 DBObject document = new BasicDBObject();
                 document.put("rev", "");
                 document.put("fileSize", "");
@@ -106,14 +157,16 @@ public class DropBoxAuth {
                 document.put("name", child.name);
                 document.put("path", child.path);
                 document.put("type", "folder");
-                
-                DBCursor cursor = collection.find();
+
+                cursor = collection.find();
                 boolean found = false;
-                if (cursor.hasNext())
-                while (cursor.hasNext()) {
-                    DBObject doc = cursor.next();
-                    if (doc.get("path").equals(child.path)) {
-                        found = true;
+                if (cursor.hasNext()) {
+                    while (cursor.hasNext()) {
+                        DBObject doc = cursor.next();
+                        String path1 = (String) doc.get("path");
+                        if (path1.equals(child.path)) {
+                            found = true;
+                        }
                     }
                 }
 
@@ -123,15 +176,14 @@ public class DropBoxAuth {
                     newDocument.append("$set", document);
                     BasicDBObject searchQuery = new BasicDBObject().append("path", child.path);
                     collection.update(searchQuery, newDocument);
-                    BasicDBObject documentToUpdate = new BasicDBObject();
-                    documentToUpdate.put("found", "false");
-                    collection.remove(documentToUpdate);
-                }
-                else {
+                } else {
+                    document.put("tags", "");
+                    document.put("description", "");
                     document.put("found", "false");
                     collection.insert(document);
                 }
-                fetchFilesAndFolders(user, client, child.path);
+
+                fetchFilesAndFolders(id, client, child.path);
             }
         }
     }

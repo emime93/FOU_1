@@ -53,7 +53,6 @@
         </c:forEach>
     </div>
 </section>  
-<script src="<c:url value = "/js/fileUpload.js"/> "></script>
 <div class="modal fade" id="my-modal">
     <div class="modal-dialog">
         <div class="modal-content">

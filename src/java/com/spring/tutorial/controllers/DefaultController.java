@@ -75,8 +75,8 @@ public class DefaultController {
     public String myDrive(ModelMap map, HttpServletRequest request) {
         map.addAttribute("title", "my-drive");
         try {
-
-            MongoFileManager fileManager = new MongoFileManager(request.getSession().getAttribute("username").toString());
+            String id = request.getSession().getAttribute("id").toString();
+            MongoFileManager fileManager = new MongoFileManager(request.getSession().getAttribute("id").toString());
             map.addAttribute("files", fileManager.getFiles());
 
         } catch (UnknownHostException ex) {
@@ -90,15 +90,15 @@ public class DefaultController {
     public String getFile(@PathVariable("id") String id, ModelMap map,
             HttpServletRequest request, HttpServletResponse response) throws IOException, Exception {
 
-        String username = request.getSession().getAttribute("username").toString();
+        String _id = request.getSession().getAttribute("id").toString();
         MongoData data = new MongoData();
-        GridFS collection = new GridFS(data.getDB(), username + "_files");
+        GridFS collection = new GridFS(data.getDB(), _id + "_files");
 
         BasicDBObject query = new BasicDBObject();
         query.put("_id", new ObjectId(id));
         GridFSDBFile file = collection.findOne(query);
 
-        DBCollection metaFileCollection = data.getDB().getCollection(username + "_files_meta");
+        DBCollection metaFileCollection = data.getDB().getCollection(_id + "_files_meta");
         BasicDBObject metaQuery = new BasicDBObject();
         metaQuery.put("file-id", new ObjectId(id));
         DBObject metaFileDoc = metaFileCollection.findOne(metaQuery);
@@ -228,14 +228,14 @@ public class DefaultController {
             BasicDBObject newDocument = new BasicDBObject();
             newDocument.append("$set", new BasicDBObject().append("dropbox_token", accessToken));
 
-            BasicDBObject searchQuery = new BasicDBObject().append("username", request.getSession().getAttribute("username"));
+            BasicDBObject searchQuery = new BasicDBObject().append("id", request.getSession().getAttribute("id"));
 
             collection.update(searchQuery, newDocument);
         }
 
         map.addAttribute("title", "my-drive");
         request.getSession().setAttribute("dropbox_token", accessToken);
-        response.sendRedirect("http://localhost:8080/FOU_1/my-drive/dropbox/user-all");
+        response.sendRedirect("http://localhost:8080/FOU_1/my-drive/dropbox/home");
         return "mydrive/dropbox";
     }
 
@@ -253,9 +253,9 @@ public class DefaultController {
             DropboxEntityFactory dbxFactory = new DropboxEntityFactory();
 
             if (path.equals("/home")) {
-                map.addAttribute("dropbox_entities", dbxFactory.getFilesAndFolders((String) session.getAttribute("username"), "/"));
+                map.addAttribute("dropbox_entities", dbxFactory.getFilesAndFolders((String) session.getAttribute("id"), "/"));
             } else {
-                map.addAttribute("dropbox_entities", dbxFactory.getFilesAndFolders((String) session.getAttribute("username"), URLDecoder.decode(path, "UTF-8") + "/"));
+                map.addAttribute("dropbox_entities", dbxFactory.getFilesAndFolders((String) session.getAttribute("id"), URLDecoder.decode(path, "UTF-8") + "/"));
             }
             if (path.equals("/home")) {
                 map.addAttribute("url_path", "home");
@@ -302,13 +302,13 @@ public class DefaultController {
         if (title.equals("my-drive")) {
             MongoData mongoData = new MongoData();
             DB db = mongoData.getDB();
-            DBCollection collection = db.getCollection(session.getAttribute("username") + "_files_meta");
+            DBCollection collection = db.getCollection(session.getAttribute("id") + "_files_meta");
             DBCursor cursor = collection.find();
-
+            
             while (cursor.hasNext()) {
                 DBObject document = cursor.next();
                 String[] tags = document.get("tags").toString().split(" ,");
-                if (document.get("name").toString().contains(tag) || tag.equals("all")) {
+                if (document.get("name").toString().toLowerCase().contains(tag.toLowerCase()) || tag.equals("all")) {
                     files.add(new MongoFile(document));
                 } else {
                     for (String oneTag : tags) {
@@ -326,26 +326,27 @@ public class DefaultController {
         } else {
             MongoData mongoData = new MongoData();
             DB db = mongoData.getDB();
-            DBCollection collection = db.getCollection(session.getAttribute("username") + "_dropbox_files_meta");
+            DBCollection collection = db.getCollection(session.getAttribute("id") + "_dropbox_files_meta");
             DBCursor cursor = collection.find();
 
             while (cursor.hasNext()) {
                 DBObject document = cursor.next();
-              //  String[] tags = document.get("tags").toString().split(" ,");
-                if (document.get("name").toString().contains(tag) || tag.equals("all")) {
+                //  String[] tags = document.get("tags").toString().split(" ,");
+                if (document.get("name").toString().toLowerCase().contains(tag.toLowerCase()) || tag.equals("all")) {
                     files.add(new DropboxEntity(document));
                 }/* else {
-                    for (String oneTag : tags) {
-                        String[] inputTags = tag.split(" ");
-                        for (String inputTag : inputTags) {
-                            if (oneTag.trim().contains(inputTag)) {
-                                files.add(new MongoFile(document));
-                                break;
-                            }
-                        }
-                    }
+                 for (String oneTag : tags) {
+                 String[] inputTags = tag.split(" ");
+                 for (String inputTag : inputTags) {
+                 if (oneTag.trim().contains(inputTag)) {
+                 files.add(new MongoFile(document));
+                 break;
+                 }
+                 }
+                 }
                         
-                }*/
+                 }*/
+
             }
             return files;
         }
@@ -356,7 +357,7 @@ public class DefaultController {
     String delete(HttpServletRequest request) throws UnknownHostException, Exception {
         MongoData mongoData = new MongoData();
         DB db = mongoData.getDB();
-        DBCollection collection = db.getCollection(request.getSession().getAttribute("username") + "_files_meta");
+        DBCollection collection = db.getCollection(request.getSession().getAttribute("id") + "_files_meta");
 
         BasicDBObject document = new BasicDBObject();
         String fileID = request.getParameter("fileID").toString();
@@ -364,7 +365,7 @@ public class DefaultController {
         collection.remove(document);
 
         document = new BasicDBObject();
-        GridFS gfs = new GridFS(db, request.getSession().getAttribute("username").toString() + "_files.files");
+        GridFS gfs = new GridFS(db, request.getSession().getAttribute("id").toString() + "_files.files");
         document.put("_id", new ObjectId(fileID));
         gfs.remove(document);
 
@@ -375,10 +376,66 @@ public class DefaultController {
 
     @RequestMapping(value = "/my-drive/dropbox/reload", method = RequestMethod.GET)
     public String reloadDropbox(HttpServletRequest request) throws IOException, DbxException, Exception {
+        
         DbxClient client = new DbxClient(config, (String) request.getSession().getAttribute("dropbox_token"));
         DropBoxAuth dropBoxAuth = new DropBoxAuth();
+        
         dropBoxAuth.authenticate((String) request.getSession().getAttribute("dropbox_token"));
-        dropBoxAuth.fetchFilesAndFolders((String) request.getSession().getAttribute("username"), client, "/");
-        return "redirect:/my-drive/dropbox/user-all";
+        
+        String userId = (String) request.getSession().getAttribute("id");
+        
+        dropBoxAuth.removeJunk(userId, client, "/");
+        dropBoxAuth.fetchFilesAndFolders(userId, client, "/");
+        
+         
+        return "redirect:/my-drive/dropbox/home";
     }
+
+    @RequestMapping(value = "/my-drive/dropbox/edit", method = RequestMethod.POST)
+    public @ResponseBody
+    String editDropboxFile(HttpServletRequest request) throws IOException, DbxException, Exception {
+        String tags = request.getParameter("tags");
+        String description = request.getParameter("description");
+        String path = request.getParameter("path");
+
+        MongoData mongoData = new MongoData();
+        DB db = mongoData.getDB();
+        DBCollection collection = db.getCollection(request.getSession().getAttribute("id") + "_dropbox_files_meta");
+
+        BasicDBObject document = new BasicDBObject();
+        document.append("tags", tags);
+        document.append("description", description);
+
+        BasicDBObject newDocument = new BasicDBObject();
+        newDocument.append("$set", document);
+        BasicDBObject searchQuery = new BasicDBObject().append("path", path);
+        collection.update(searchQuery, newDocument);
+
+        return "success";
+    }
+
+    @RequestMapping(value = "/my-drive/dropbox/get-info", method = RequestMethod.GET)
+    public @ResponseBody
+    List<String> getDropboxFileInfo(HttpServletRequest request) throws IOException, DbxException, Exception {
+
+        String path = request.getParameter("path");
+
+        List<String> result = new ArrayList<>();
+
+        MongoData mongoData = new MongoData();
+        DB db = mongoData.getDB();
+        DBCollection collection = db.getCollection(request.getSession().getAttribute("id") + "_dropbox_files_meta");
+
+        DBCursor cursor = collection.find();
+
+        while (cursor.hasNext()) {
+            DBObject document = cursor.next();
+            if (document.get("path").equals(path)) {
+                result.add((String) document.get("tags"));
+                result.add((String) document.get("description"));
+            }
+        }
+        return result;
+    }
+
 }

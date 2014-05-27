@@ -40,6 +40,10 @@
         <servlet-name>FacebookCallback</servlet-name>
         <servlet-class>com.spring.tutorial.facebook.FacebookCallback</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DropboxUploaderServlet</servlet-name>
+        <servlet-class>com.spring.tutorial.formHandlers.DropboxUploaderServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>FacebookCallback</servlet-name>
         <url-pattern>/FacebookCallback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DropboxUploaderServlet</servlet-name>
+        <url-pattern>/my-drive/file-upload-dropbox</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -8,6 +8,9 @@ package com.spring.tutorial.dropbox;
 
 import com.mongodb.DBObject;
 import com.spring.tutorial.entitites.FOUFile;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -15,12 +18,30 @@ import com.spring.tutorial.entitites.FOUFile;
  */
 public class DropboxEntity extends FOUFile{
     
+    /**
+     *  objects needed for storing the dropbox info for the files
+     */
     private String name;
     private String size;
     private String lastModified;
     private String path;
     private String rev;
+    private List<String> tags;
 
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+    
+    private String description;
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
     @Override
     public String getRev() {
         return rev;
@@ -80,6 +101,10 @@ public class DropboxEntity extends FOUFile{
         this.lastModified = (String) doc.get("lastModified");
         this.path = (String) doc.get("path");
         this.rev = (String) doc.get("rev");
+        this.tags = new ArrayList<>();
+        String[] tagsFromDB = doc.get("tags").toString().split(",");
+        this.tags.addAll(Arrays.asList(tagsFromDB));
+        this.description = (String) doc.get("description");
     }
 
     @Override

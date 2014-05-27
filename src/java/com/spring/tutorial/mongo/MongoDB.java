@@ -52,26 +52,29 @@ public class MongoDB {
             ex.printStackTrace();
         }
     }
+
     public void getUserInfo() {
         if (auth) {
             DBCollection collection = db.getCollection("users");
             DBCursor cursor = collection.find();
             while (cursor.hasNext()) {
                 DBObject document = cursor.next();
-                
+
                 if (document.get("username").equals(user.getUsername())) {
                     user.setDropboxAccessToken((String) document.get("dropbox_token"));
                 }
             }
         }
     }
+
     public boolean userExist() {
         //return true if user doesn't exist
         if (auth) {
             DBCollection collection = db.getCollection("users");
             DBCursor cursor = collection.find();
             while (cursor.hasNext()) {
-                if (cursor.next().get("username").equals(user.getUsername())) {
+                DBObject doc = cursor.next();
+                if (doc.get("username").equals(user.getUsername()) || doc.get("facebook_id").equals(user.getId())) {
                     return false;
                 }
             }
@@ -88,7 +91,13 @@ public class MongoDB {
                 document.append("email", user.getEmail());
                 document.append("password", user.getPassword());
                 document.append("dropbox_token", "");
-                document.append("facebook_token", user.getFacebookToken());
+                document.append("dropbox_hash", "");
+                
+                if (user.getId().equals("")) {
+                    document.append("id", document.get("_id").toString());
+                } else {
+                    document.append("id", user.getId());
+                }
 
                 DBCollection collection = db.getCollection("users");
                 collection.insert(document);

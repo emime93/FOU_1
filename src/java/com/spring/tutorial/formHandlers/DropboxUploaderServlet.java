@@ -6,30 +6,20 @@
 
 package com.spring.tutorial.formHandlers;
 
-import com.dropbox.core.DbxClient;
-import com.dropbox.core.DbxRequestConfig;
-import com.spring.tutorial.entitites.DropboxUploader;
-import com.spring.tutorial.entitites.FileUploader;
-import facebook4j.FacebookException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 /**
  *
- * @author petricioiurobert
+ * @author Petricioiu
  */
-
 @MultipartConfig
-public class UploadFile extends HttpServlet {
+public class DropboxUploaderServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,22 +31,19 @@ public class UploadFile extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, FacebookException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        int ind = 2;
         try (PrintWriter out = response.getWriter()) {
-            String title = request.getParameter("title");
-            if (title.equals("my-drive")) {
-            FileUploader uploader = new FileUploader(request, response);
-            out.println(uploader.upload());
-            }
-            else {
-                DbxRequestConfig config = new DbxRequestConfig(
-                "JavaTutorial/1.0", Locale.getDefault().toString());
-                DbxClient client = new DbxClient(config, (String) request.getSession().getAttribute("dropbox_token"));
-                DropboxUploader uploader = new DropboxUploader(request,response,client);
-                uploader.upload();
-            }
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet DropboxUploaderServlet</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet DropboxUploaderServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
     }
 
@@ -72,11 +59,7 @@ public class UploadFile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (FacebookException ex) {
-            Logger.getLogger(UploadFile.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -90,11 +73,7 @@ public class UploadFile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (FacebookException ex) {
-            Logger.getLogger(UploadFile.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

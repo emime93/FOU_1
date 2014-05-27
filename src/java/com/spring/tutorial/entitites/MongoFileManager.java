@@ -29,10 +29,10 @@ public class MongoFileManager {
     private DBCollection collection;
     private List<MongoFile> files;
     
-    public MongoFileManager(String user) throws UnknownHostException {
+    public MongoFileManager(String id) throws UnknownHostException {
         MongoData data = new MongoData();
         try {
-            collection = data.getDB().getCollection(user + "_files_meta");
+            collection = data.getDB().getCollection(id + "_files_meta");
             files = new ArrayList<>();
             DBCursor cursor = collection.find();
             

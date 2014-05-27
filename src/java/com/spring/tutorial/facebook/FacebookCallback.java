@@ -11,6 +11,9 @@ import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -50,16 +53,21 @@ public class FacebookCallback extends HttpServlet {
                 user.setFacebookToken(oauthCode);
                 user.setPassword("");
                 user.setUsername(facebook.getName());
+                user.setId(facebook.getId());
 
                 MongoDB mongoDB = new MongoDB(user);
                 if (mongoDB.registerUser()) {
                     request.getSession().setAttribute("username", user.getUsername());
+                    request.getSession().setAttribute("id", user.getId());
                     response.sendRedirect(request.getContextPath() + "/my-drive");
-                  //  facebook.postStatusMessage("I have just registered with File Online Upload :)");
-                }
-                else 
-                if (!mongoDB.userExist()) {
+                    
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    Date date = new Date();
+                    facebook.postStatusMessage("I have just registered with File Online Upload :) on " + dateFormat.format(date));
+                    
+                } else if (!mongoDB.userExist()) {
                     request.getSession().setAttribute("username", user.getUsername());
+                    request.getSession().setAttribute("id", user.getId());
                     mongoDB.getUserInfo();
                     request.getSession().setAttribute("dropbox_token", user.getDropboxAccessToken());
                     response.sendRedirect(request.getContextPath() + "/my-drive");

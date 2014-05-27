@@ -33,7 +33,10 @@
                                 "<li style=\"cursor:pointer;\" onmousedown=\"deleteFile('" + array.downloadLink + "')\"><a>Delete</a></li></li></ul></div></div></div></div></div></div></div>");
                     } else {
                         tagsContent = "";
-                        description = "";
+                         for (var j = 0; j < array.tags.length; ++j) {
+                            tagsContent += "&nbsp; <span class=\"label label-danger\">" + array.tags[j] + "</span>";
+                        }
+                        description = array.description;
                         var linkOptions;
                         var titleID = array.rev;
                         if (array.type === "folder"){
@@ -55,8 +58,8 @@
                                 + description + "</div></div></div></div><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
                                 "<div class=\"panel panel-default\" style=\"min-width:200px;\"><div class=\"panel-heading\">Last modified: " + array.lastModified + "</div>" +
                                 "<div class=\"panel-body\"><ul class=\"nav nav-pills nav-stacked\"><li class=\"active\"><a href=\"downloads" + array.path + "\">Download</a></li>" +
-                                "<li style=\"cursor:pointer;\" onmousedown=\"deleteFile('" + array.path + "')\"><a>Delete</a></li></li></ul></div></div></div></div></div></div></div>");
-                    
+                                "<li style=\"cursor:pointer;\" data-toggle=\"modal\" data-target=\"#edit-modal\" onmousedown=\"document.getElementById('edit-title').innerHTML = '${file.path}';\"><a>Edit</a></li>" +
+                                "<li style=\"cursor:pointer;\" onmousedown=\"deleteFile('" + array.path + "')\"><a>Delete</a></li></li></ul></div></div></div></div></div></div></div>");                  
                     }
                 }
             }
@@ -81,6 +84,7 @@
         }
     }(document, "script", "twitter-wjs");</script>
 <!-- Placed at the end of the document so the pages load faster -->
+<script src="<c:url value = "/js/fileUpload.js"/> "></script>
 <script src="http://getbootstrap.com/2.3.2/assets/js/jquery.js"></script>
 <script src="http://getbootstrap.com/2.3.2/assets/js/google-code-prettify/prettify.js"></script>
 <script src="http://getbootstrap.com/2.3.2/assets/js/bootstrap-transition.js"></script>
