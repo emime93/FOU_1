@@ -304,7 +304,7 @@ public class DefaultController {
             DB db = mongoData.getDB();
             DBCollection collection = db.getCollection(session.getAttribute("id") + "_files_meta");
             DBCursor cursor = collection.find();
-            
+
             while (cursor.hasNext()) {
                 DBObject document = cursor.next();
                 String[] tags = document.get("tags").toString().split(" ,");
@@ -376,18 +376,17 @@ public class DefaultController {
 
     @RequestMapping(value = "/my-drive/dropbox/reload", method = RequestMethod.GET)
     public String reloadDropbox(HttpServletRequest request) throws IOException, DbxException, Exception {
-        
+
         DbxClient client = new DbxClient(config, (String) request.getSession().getAttribute("dropbox_token"));
         DropBoxAuth dropBoxAuth = new DropBoxAuth();
-        
+
         dropBoxAuth.authenticate((String) request.getSession().getAttribute("dropbox_token"));
-        
+
         String userId = (String) request.getSession().getAttribute("id");
-        
+
         dropBoxAuth.removeJunk(userId, client, "/");
         dropBoxAuth.fetchFilesAndFolders(userId, client, "/");
-        
-         
+
         return "redirect:/my-drive/dropbox/home";
     }
 
@@ -438,4 +437,23 @@ public class DefaultController {
         return result;
     }
 
+    @RequestMapping(value = "/my-drive/dropbox/delete", method = RequestMethod.POST)
+    public @ResponseBody
+    String deleteDropboxFile(HttpServletRequest request) throws DbxException, UnknownHostException, Exception {
+        String path = request.getParameter("path");
+        
+        DbxRequestConfig config = new DbxRequestConfig(
+                "JavaTutorial/1.0", Locale.getDefault().toString());
+        DbxClient client = new DbxClient(config, (String) request.getSession().getAttribute("dropbox_token"));
+        client.delete(path);
+        MongoData mongoData = new MongoData();
+        DB db = mongoData.getDB();
+        DBCollection collection = db.getCollection(request.getSession().getAttribute("id") + "_dropbox_files_meta");
+        
+        BasicDBObject document = new BasicDBObject();
+	document.put("path", path);
+	collection.remove(document);
+        
+        return "sucessfull";
+    }
 }

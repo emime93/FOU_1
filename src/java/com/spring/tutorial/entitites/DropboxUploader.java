@@ -28,6 +28,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -38,7 +39,8 @@ public class DropboxUploader {
     private static HttpServletRequest request;
     private static HttpServletResponse response;
     private DbxClient client;
-    public DropboxUploader(HttpServletRequest req, HttpServletResponse res,DbxClient client) {
+
+    public DropboxUploader(HttpServletRequest req, HttpServletResponse res, DbxClient client) {
         this.request = req;
         this.response = res;
         this.client = client;
@@ -78,9 +80,31 @@ public class DropboxUploader {
             try {
                 String fileName = filePart.getSubmittedFileName();
                 String path = request.getParameter("path");
+                if (path.equals("/home")) {
+                    path = "";
+                }
                 DbxEntry.File uploadedFile = client.uploadFile(path + "/" + filePart.getSubmittedFileName(),
                         DbxWriteMode.add(), file.length(), inputStream);
-                System.out.println("Uploaded: " + uploadedFile.toString());
+                DBCollection collection = db.getCollection(request.getSession().getAttribute("id") + "_dropbox_files_meta");
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                Date date = new Date();
+                
+                long fileSize = filePart.getSize();
+                
+                BasicDBObject document = new BasicDBObject();
+                document.put("rev", "");
+                document.put("fileSize", Long.toString(fileSize));
+                document.put("lastModified", dateFormat.format(date));
+                document.put("name", filePart.getSubmittedFileName());
+                document.put("path", path + "/" + filePart.getSubmittedFileName());
+                document.put("type", "file");
+                document.put("tags", request.getParameter("tags"));
+                document.put("description", request.getParameter("description"));
+                document.put("found","true");
+                
+                collection.insert(document);
+                
             } finally {
                 inputStream.close();
             }

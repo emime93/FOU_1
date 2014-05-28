@@ -11,6 +11,7 @@ import com.spring.tutorial.entitites.FOUFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -27,6 +28,15 @@ public class DropboxEntity extends FOUFile{
     private String path;
     private String rev;
     private List<String> tags;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public List<String> getTags() {
         return tags;
@@ -95,6 +105,7 @@ public class DropboxEntity extends FOUFile{
         this.rev = rev;
     }
     public DropboxEntity (DBObject doc) {
+        this.id = ((ObjectId) doc.get("_id")).toString();
         this.name = (String) doc.get("name");
         this.type = (String) doc.get("type");
         this.size = (String) doc.get("fileSize");
@@ -105,6 +116,9 @@ public class DropboxEntity extends FOUFile{
         String[] tagsFromDB = doc.get("tags").toString().split(",");
         this.tags.addAll(Arrays.asList(tagsFromDB));
         this.description = (String) doc.get("description");
+        
+        if (this.tags.get(0).equals(""))
+            this.tags.set(0, "no tags");
     }
 
     @Override

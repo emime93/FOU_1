@@ -24,6 +24,7 @@ public class MongoFile extends FOUFile{
     private String downloadLink;
     private String type;
     private String description;
+    private String size;
 
     public String getDescription() {
         return description;
@@ -33,7 +34,6 @@ public class MongoFile extends FOUFile{
         this.description = description;
     }
     
-    private long size;
     private List<String> tags;
 
     public List<String> getTags() {
@@ -44,20 +44,16 @@ public class MongoFile extends FOUFile{
         this.tags = tags;
     }
     
-    public long getSizeLong() {
+    @Override
+    public String getSize() {
         return size;
     }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
-
     public MongoFile(DBObject document) {
         title = (String) document.get("name");
         date = (String) document.get("last_modified");
         downloadLink = document.get("file-id").toString();
         type = (String) document.get("content-type");
-        size = (long) document.get("size");
+        size = Long.toString(((long) document.get("size"))/1024) + " KB";
         tags = new ArrayList<>();
         String tagContainer = (String) document.get("tags");
         String[] tagTokens = tagContainer.split(",");

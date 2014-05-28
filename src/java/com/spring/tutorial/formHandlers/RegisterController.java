@@ -41,8 +41,10 @@ public class RegisterController {
     @RequestMapping(value = "/register_user", method = RequestMethod.POST)
     public String addUser(@ModelAttribute("user") User user, ModelMap map, HttpServletRequest request) {
         MongoDB mongo = new MongoDB(user);
-        if(mongo.registerUser())
+        if(mongo.registerUser()) {
             request.getSession().setAttribute("username", user.getUsername());
+            request.getSession().setAttribute("id", user.getId());
+        }
         return "account/login";
     }
 }

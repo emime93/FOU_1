@@ -18,10 +18,11 @@
                         for (var j = 0; j < array.tags.length; ++j) {
                             tagsContent += "&nbsp; <span class=\"label label-danger\">" + array.tags[j] + "</span>";
                         }
-
+                        var fileAddition = "<span class='badge badge-info' style='float:right;'>" + array.size +"</span>";
+                            
                         $("#accordion").append("<div class=\"panel panel-default\"><div class=\"panel-heading\">" +
                                 "<h4 class=\"panel-title\"><a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#" + array.downloadLink + "\">" +
-                                array.title + "</a></h4></div><div id=\"" + array.downloadLink + "\" class=\"panel-collapse collapse\">" +
+                                array.title + "</a>" + fileAddition + "</h4></div><div id=\"" + array.downloadLink + "\" class=\"panel-collapse collapse\">" +
                                 "<div class=\"panel-body\"><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
                                 "<div class=\"panel panel-default\"><div class=\"panel-heading\">Tags</div><div class=\"panel-body\">" +
                                 tagsContent +
@@ -39,17 +40,21 @@
                         description = array.description;
                         var linkOptions;
                         var titleID = array.rev;
+                        var folderAddition = "";
+                        var fileAddition = "";
                         if (array.type === "folder"){
                             titlePath = "../dropbox" + array.path;
                             linkOptions = "";
+                            folderAddition = "<img src=\"/FOU_1/images/icons/dropbox_icon.ico\" style='width:20px;'/> &nbsp;";
                         }
                         else {
+                            fileAddition = "<span class='badge badge-info' style='float:right;'>" + array.size +"</span>";
                             titlePath = "#" + array.rev;
                             linkOptions = "data-toggle='collapse' data-parent='#accordion'";
                         }
                         $("#accordion").append("<div class=\"panel panel-default\"><div class=\"panel-heading\">" +
-                                "<h4 class=\"panel-title\"><a " + linkOptions + " href=\"" + titlePath + "\">" +
-                                array.name + "</a></h4></div><div id=\"" + titleID + "\" class=\"panel-collapse collapse\">" +
+                                "<h4 class=\"panel-title\"><a " + linkOptions + " href=\"" + titlePath + "\">" + folderAddition + 
+                                array.name + "</a>" + fileAddition + "</h4></div><div id=\"" + titleID + "\" class=\"panel-collapse collapse\">" +
                                 "<div class=\"panel-body\"><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
                                 "<div class=\"panel panel-default\"><div class=\"panel-heading\">Tags</div><div class=\"panel-body\">" +
                                 tagsContent +
@@ -66,9 +71,6 @@
         }).fail(function(msg) {
         });
     }
-    $("#close-upload-modal").click(function() {
-        getTableValues("all");
-    });
     $("#search-box").keypress(function() {
         var value = document.getElementById("search-box").value;
         getTableValues(value);

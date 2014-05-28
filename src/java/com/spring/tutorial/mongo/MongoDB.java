@@ -74,7 +74,7 @@ public class MongoDB {
             DBCursor cursor = collection.find();
             while (cursor.hasNext()) {
                 DBObject doc = cursor.next();
-                if (doc.get("username").equals(user.getUsername()) || doc.get("facebook_id").equals(user.getId())) {
+                if (doc.get("username").equals(user.getUsername()) || doc.get("id").equals(user.getId())) {
                     return false;
                 }
             }
@@ -94,7 +94,7 @@ public class MongoDB {
                 document.append("dropbox_hash", "");
                 
                 if (user.getId().equals("")) {
-                    document.append("id", document.get("_id").toString());
+                    document.append("id", "dada");
                 } else {
                     document.append("id", user.getId());
                 }

@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/FOU_1/css/bootstrap-tagsinput.css" />
 
-<section class="container-fluid" style="max-width:900px;background-color: #fff;height:100%;">
+<section class="container-fluid" style="max-width:900px;background-color: #fff;">
     <ol class="breadcrumb" style="margin-top:60px;margin-bottom:0px;">
         <c:forEach var="link" items = "${url_path}">
             <li><a href="<c:url value="/my-drive/dropbox/${link}" />">${link}</a></li>
@@ -19,16 +19,16 @@
                             <h4 class="panel-title">
                                 <c:choose>
                                     <c:when test="${file.type.equals('folder')}">
-                                        <a href="<c:url value="../dropbox${file.path}" />">${file.name}<a/>
+                                        <a href="<c:url value="../dropbox${file.path}" />"> <img src="<c:url value="/images/icons/dropbox_icon.ico" />" style='width:20px;'/> ${file.name}<a/> 
                                         </c:when>
                                         <c:otherwise>
-                                            <a data-toggle="collapse" data-parent="#accordion" href="#${file.rev}">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#${file.id}">
                                                 ${file.name}
-                                            </a></c:otherwise>
+                                            </a> <span class='badge badge-info' style='float:right;'>${file.size}</span> </c:otherwise>
                                     </c:choose>
                             </h4>
                         </div>
-                        <div id="${file.rev}" class="panel-collapse collapse">
+                        <div id="${file.id}" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="collumn">
                                     <div class="col-xs-6 col-md-4">
@@ -60,7 +60,7 @@
                                                 <ul class="nav nav-pills nav-stacked">
                                                     <li class="active"><a href="<c:url value="/my-drive/dropbox/downloads${file.path}" />">Download</a></li>
                                                     <li style="cursor:pointer;" data-toggle="modal" data-target="#edit-modal" onmousedown="document.getElementById('edit-title').innerHTML = '${file.path}'; getDropboxFileInfo();"><a>Edit</a></li> 
-                                                    <li style="cursor:pointer;" onmousedown="deleteFile('${file.path}')"><a>Delete</a></li>
+                                                    <li style="cursor:pointer;" onmousedown="deleteDropboxFile('${file.path}')"><a>Delete</a></li>
                                                 </ul>
                                             </div>
                                         </div>

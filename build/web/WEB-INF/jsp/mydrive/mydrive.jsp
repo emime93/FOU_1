@@ -7,7 +7,7 @@
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#${file.downloadLink}">
                             ${file.title}
-                        </a>
+                        </a> <span class='badge badge-info' style='float:right;'>${file.size}</span>
                     </h4>
                 </div>
                 <div id="${file.downloadLink}" class="panel-collapse collapse">

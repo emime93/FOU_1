@@ -99,6 +99,17 @@ function uploadFile() {
     }
 
 }
+function deleteDropboxFile(path) {
+     $.ajax({
+        type: "POST",
+        url: "http://localhost:8080/FOU_1/my-drive/dropbox/delete",
+        data: {path: path}
+    }).done(function(msg) {
+         location.reload();
+    }).fail(function(msg) {
+        alert("error:" + msg);
+    });
+}
 function deleteFile(fileID) {
     $.ajax({
         type: "POST",
@@ -145,6 +156,7 @@ function uploadProgress(evt) {
 
 function uploadComplete(evt) {
     /* This event is raised when the server send back a response */
+    getTableValues(document.getElementById('fileName').innerHTML);
     document.getElementById('fileName').innerHTML = '';
     document.getElementById('fileSize').innerHTML = '';
     document.getElementById('fileType').innerHTML = '';
@@ -152,7 +164,7 @@ function uploadComplete(evt) {
     document.getElementById("show-notification").click();
     document.getElementById("close-upload-modal").click();
     document.getElementById("file-tags").value = "";
-
+   
 }
 
 function uploadFailed(evt) {
