@@ -15,7 +15,8 @@
     <script src="<c:url value = "/js/bootstrap.min.js"/> "></script>
     <script src="<c:url value = "/js/form-validation.js"/> "></script>
     <body>
-        <section id="register-form-container">
+        <a href="login"><div id="register-link">&nbsp;login&nbsp;</div></a>
+        <section id="register-form-container" style="height:350px;">
             <div class="form-group has-success has-feedback" id="username-container">
                 <input type="text" placeholder="username" name="username" id="username" class="form-control" required onkeyup="checkFields();"/>
                 <span class="glyphicon glyphicon-ok form-control-feedback" style="margin-top:-25px;display:none;"></span>

@@ -18,8 +18,8 @@
                         for (var j = 0; j < array.tags.length; ++j) {
                             tagsContent += "&nbsp; <span class=\"label label-danger\">" + array.tags[j] + "</span>";
                         }
-                        var fileAddition = "<span class='badge badge-info' style='float:right;'>" + array.size +"</span>";
-                            
+                        var fileAddition = "<span class='badge badge-info' style='float:right;'>" + array.size + "</span>";
+
                         $("#accordion").append("<div class=\"panel panel-default\"><div class=\"panel-heading\">" +
                                 "<h4 class=\"panel-title\"><a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#" + array.downloadLink + "\">" +
                                 array.title + "</a>" + fileAddition + "</h4></div><div id=\"" + array.downloadLink + "\" class=\"panel-collapse collapse\">" +
@@ -34,7 +34,7 @@
                                 "<li style=\"cursor:pointer;\" onmousedown=\"deleteFile('" + array.downloadLink + "')\"><a>Delete</a></li></li></ul></div></div></div></div></div></div></div>");
                     } else {
                         tagsContent = "";
-                         for (var j = 0; j < array.tags.length; ++j) {
+                        for (var j = 0; j < array.tags.length; ++j) {
                             tagsContent += "&nbsp; <span class=\"label label-danger\">" + array.tags[j] + "</span>";
                         }
                         description = array.description;
@@ -42,18 +42,18 @@
                         var titleID = array.rev;
                         var folderAddition = "";
                         var fileAddition = "";
-                        if (array.type === "folder"){
+                        if (array.type === "folder") {
                             titlePath = "../dropbox" + array.path;
                             linkOptions = "";
                             folderAddition = "<img src=\"/FOU_1/images/icons/dropbox_icon.ico\" style='width:20px;'/> &nbsp;";
                         }
                         else {
-                            fileAddition = "<span class='badge badge-info' style='float:right;'>" + array.size +"</span>";
+                            fileAddition = "<span class='badge badge-info' style='float:right;'>" + array.size + "</span>";
                             titlePath = "#" + array.rev;
                             linkOptions = "data-toggle='collapse' data-parent='#accordion'";
                         }
                         $("#accordion").append("<div class=\"panel panel-default\"><div class=\"panel-heading\">" +
-                                "<h4 class=\"panel-title\"><a " + linkOptions + " href=\"" + titlePath + "\">" + folderAddition + 
+                                "<h4 class=\"panel-title\"><a " + linkOptions + " href=\"" + titlePath + "\">" + folderAddition +
                                 array.name + "</a>" + fileAddition + "</h4></div><div id=\"" + titleID + "\" class=\"panel-collapse collapse\">" +
                                 "<div class=\"panel-body\"><div class=\"collumn\"><div class=\"col-xs-6 col-md-4\">" +
                                 "<div class=\"panel panel-default\"><div class=\"panel-heading\">Tags</div><div class=\"panel-body\">" +
@@ -64,7 +64,7 @@
                                 "<div class=\"panel panel-default\" style=\"min-width:200px;\"><div class=\"panel-heading\">Last modified: " + array.lastModified + "</div>" +
                                 "<div class=\"panel-body\"><ul class=\"nav nav-pills nav-stacked\"><li class=\"active\"><a href=\"downloads" + array.path + "\">Download</a></li>" +
                                 "<li style=\"cursor:pointer;\" data-toggle=\"modal\" data-target=\"#edit-modal\" onmousedown=\"document.getElementById('edit-title').innerHTML = '${file.path}';\"><a>Edit</a></li>" +
-                                "<li style=\"cursor:pointer;\" onmousedown=\"deleteFile('" + array.path + "')\"><a>Delete</a></li></li></ul></div></div></div></div></div></div></div>");                  
+                                "<li style=\"cursor:pointer;\" onmousedown=\"deleteFile('" + array.path + "')\"><a>Delete</a></li></li></ul></div></div></div></div></div></div></div>");
                     }
                 }
             }
@@ -76,6 +76,7 @@
         getTableValues(value);
     });
 </script>
+
 <script>!function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
         if (!d.getElementById(id)) {

@@ -14,8 +14,10 @@
     <script src="<c:url value = "/js/jquery.js"/> "></script>
     <script src="<c:url value = "/js/bootstrap.min.js"/> "></script>
     <script src="<c:url value = "/js/form-validation.js"/> "></script>
-    
+
     <body>
+
+        <a href="signup"><div id="register-link">register</div></a>
         <section id="register-form-container">
             <div class="form-group has-success has-feedback" id="username-container">
                 <input type="text" placeholder="username" name="username" id="username" class="form-control" required onkeyup="checkFieldsLogin();"/>

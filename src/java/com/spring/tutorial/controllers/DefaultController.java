@@ -202,8 +202,8 @@ public class DefaultController {
             log("On /dropbox-auth-finish: CSRF mismatch: " + ex.getMessage());
             return returnTo;
         } catch (DbxWebAuth.NotApprovedException ex) {
-
-            return returnTo;
+            
+            return "redirect:my-drive/dropbox/home";
         } catch (DbxWebAuth.ProviderException ex) {
             log("On /dropbox-auth-finish: Auth failed: " + ex.getMessage());
             response.sendError(503, "Error communicating with Dropbox." + ex.getMessage());

@@ -39,6 +39,7 @@ public class RegisterController {
         user.setUsername(request.getParameter("username"));
         user.setPassword(request.getParameter("password"));
         user.setEmail(request.getParameter("email"));
+        user.setDropboxAccessToken("nothing");
         user.setId("none");
         
         MongoDB mongo = new MongoDB(user);

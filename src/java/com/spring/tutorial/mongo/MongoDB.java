@@ -90,11 +90,13 @@ public class MongoDB {
                 document.append("username", user.getUsername());
                 document.append("email", user.getEmail());
                 document.append("password", user.getPassword());
-                document.append("dropbox_token", "");
+                document.append("dropbox_token", user.getDropboxAccessToken());
                 document.append("dropbox_hash", "");
                 
                 if (user.getId().equals("none")) {
-                    document.append("id", Long.toString(System.currentTimeMillis()));
+                    String id = Long.toString(System.currentTimeMillis());
+                    document.append("id", id);
+                    user.setId(id);
                 } else {
                     document.append("id", user.getId());
                 }

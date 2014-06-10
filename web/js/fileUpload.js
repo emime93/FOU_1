@@ -34,6 +34,7 @@ function uploadDropboxFile() {
     }
     
 }
+
 function getDropboxFileInfo() {
     var path = document.getElementById('edit-title').innerHTML;
     $.ajax({

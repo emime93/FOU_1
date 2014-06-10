@@ -7,7 +7,7 @@
             </c:forEach>
     </ol>
     <c:choose>
-        <c:when test="${dropbox_token == ''}">
+        <c:when test="${dropbox_token == 'nothing'}">
             <div style="background-color:#fff;height:100%;">
                 <img src="<c:url value="/images/icons/dropbox_icon.ico" />" style="position:absolute;top:50%;left:50%;margin:-150px 0 0 -125px;"/>
                 <a href="<c:url value="/dropbox" />">
