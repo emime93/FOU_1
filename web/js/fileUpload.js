@@ -131,6 +131,10 @@ function fileSelected() {
         else
             fileSize = (Math.round(file.size * 100 / 1024) / 100).toString() + 'KB';
 
+        document.getElementById('fileName').style.display = "block";
+        document.getElementById('fileSize').style.display = "block";
+        document.getElementById('fileType').style.display = "block";
+        
         document.getElementById('fileName').innerHTML = 'Name: ' + file.name;
         document.getElementById('fileSize').innerHTML = 'Size: ' + fileSize;
         document.getElementById('fileType').innerHTML = 'Type: ' + file.type;
@@ -156,7 +160,7 @@ function uploadProgress(evt) {
 
 function uploadComplete(evt) {
     /* This event is raised when the server send back a response */
-    getTableValues(document.getElementById('fileName').innerHTML);
+    getTableValues("all");
     document.getElementById('fileName').innerHTML = '';
     document.getElementById('fileSize').innerHTML = '';
     document.getElementById('fileType').innerHTML = '';
@@ -164,7 +168,6 @@ function uploadComplete(evt) {
     document.getElementById("show-notification").click();
     document.getElementById("close-upload-modal").click();
     document.getElementById("file-tags").value = "";
-   
 }
 
 function uploadFailed(evt) {

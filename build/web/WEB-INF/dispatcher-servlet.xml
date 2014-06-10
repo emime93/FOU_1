@@ -16,6 +16,7 @@
     <mvc:resources mapping="/images/**" location="/images/" />
     <mvc:resources mapping="/js/**" location="/js/" />
     <mvc:resources mapping="/bootstrap3/css/**" location="/bootstrap3/css/" />
+    <mvc:resources mapping="/bootstrap3/fonts/**" location="/bootstrap3/fonts/" />
     
     <bean id="jspViewResolver"
             class="org.springframework.web.servlet.view.InternalResourceViewResolver">

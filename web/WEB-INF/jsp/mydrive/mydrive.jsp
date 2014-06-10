@@ -26,12 +26,12 @@
                         </div>
                         <div class="collumn">
                             <div class="col-xs-6 col-md-4">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">Description</div>
-                                        <div class="panel-body">
-                                           ${file.description}
-                                        </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Description</div>
+                                    <div class="panel-body">
+                                        ${file.description}
                                     </div>
+                                </div>
                             </div>
                         </div>
                         <div class="collumn">
@@ -82,12 +82,14 @@
             </div>
             <div class="modal-footer">
                 <div style="float:left;">
-                    <div id="fileName" class="label label-danger"></div>
-                    <div id="fileSize" class="label label-primary"></div>
-                    <div id="fileType" class="label label-info"></div>
+                    <div id="fileName" class="label label-danger" style="display: none;padding:10px;margin-top:5px;"></div>
+                    <div id="fileSize" class="label label-primary" style="display: none;padding:10px;margin-top:5px;"></div>
+                    <div id="fileType" class="label label-info" style="display: none;padding:10px;margin-top:5px;"></div>
                 </div>
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="close-upload-modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="uploadFile()">upload</button>
+                <div style="float:right;">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="close-upload-modal" style="margin-top:35px;">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="uploadFile()" style="margin-top:35px;">upload</button>
+                </div>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

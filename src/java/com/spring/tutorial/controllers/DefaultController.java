@@ -441,7 +441,7 @@ public class DefaultController {
     public @ResponseBody
     String deleteDropboxFile(HttpServletRequest request) throws DbxException, UnknownHostException, Exception {
         String path = request.getParameter("path");
-        
+
         DbxRequestConfig config = new DbxRequestConfig(
                 "JavaTutorial/1.0", Locale.getDefault().toString());
         DbxClient client = new DbxClient(config, (String) request.getSession().getAttribute("dropbox_token"));
@@ -449,11 +449,29 @@ public class DefaultController {
         MongoData mongoData = new MongoData();
         DB db = mongoData.getDB();
         DBCollection collection = db.getCollection(request.getSession().getAttribute("id") + "_dropbox_files_meta");
-        
+
         BasicDBObject document = new BasicDBObject();
-	document.put("path", path);
-	collection.remove(document);
-        
+        document.put("path", path);
+        collection.remove(document);
+
         return "sucessfull";
+    }
+
+    @RequestMapping(value = "/check-user-existence", method = RequestMethod.GET)
+    public @ResponseBody
+    boolean checkIfUserExists(HttpServletRequest request) throws IOException, DbxException, Exception {
+        String username = (String) request.getParameter("username");
+        MongoData mongoData = new MongoData();
+        DB db = mongoData.getDB();
+        DBCollection collection = db.getCollection("users");
+        DBCursor cursor = collection.find();
+        
+        while(cursor.hasNext()) {
+            DBObject doc = (DBObject) cursor.next();
+            String retUsername = (String) doc.get("username");
+            if (retUsername.equals(username))
+                return true;
+        }
+        return false;
     }
 }

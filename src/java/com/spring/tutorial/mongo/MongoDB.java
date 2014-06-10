@@ -93,8 +93,8 @@ public class MongoDB {
                 document.append("dropbox_token", "");
                 document.append("dropbox_hash", "");
                 
-                if (user.getId().equals("")) {
-                    document.append("id", "dada");
+                if (user.getId().equals("none")) {
+                    document.append("id", Long.toString(System.currentTimeMillis()));
                 } else {
                     document.append("id", user.getId());
                 }
@@ -106,7 +106,7 @@ public class MongoDB {
                 return false;
             }
         }
-        return false;
+        return true;
     }
 
     public boolean checkUser() {

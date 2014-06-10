@@ -16,6 +16,7 @@ import java.net.BindException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -36,20 +37,14 @@ public class LoginController {
     public String initForm(ModelMap model) {
         return "account/login";
     }
-
-    @ModelAttribute("loginUser")
-    public LoggedUser getLoggedUser(){
-        return new LoggedUser();
-    }
     
     @RequestMapping(value = "/login_user", method = RequestMethod.POST)
-    public String loginUser(@ModelAttribute("loginUser") LoggedUser user, ModelMap map, HttpServletRequest request) {
-        User _user = new User();
-        _user.setEmail("");
-        _user.setPassword(user.getPassword());
-        _user.setUsername(user.getUsername());
+    public String loginUser(ModelMap map, HttpServletRequest request) {
+        User user = new User();
+        user.setUsername(request.getParameter("username"));
+        user.setPassword(request.getParameter("password"));
         
-        MongoDB mongo = new MongoDB(_user);
+        MongoDB mongo = new MongoDB(user);
         if (mongo.checkUser()) { 
             request.getSession().setAttribute("username", user.getUsername());
             DBCollection collection = mongo.getDb().getCollection("users");
@@ -59,6 +54,7 @@ public class LoginController {
                 if (document.get("username").equals(user.getUsername()) &&
                     document.get("password").equals(user.getPassword())) {
                     request.getSession().setAttribute("dropbox_token", document.get("dropbox_token"));
+                    request.getSession().setAttribute("id", document.get("id"));
                 }
             }
             return "redirect:my-drive";

@@ -33,18 +33,20 @@ public class RegisterController {
         return "account/register";
     }
     
-    @ModelAttribute("user")
-    public User getUserObject() {
-        return new User();
-    }
-    
     @RequestMapping(value = "/register_user", method = RequestMethod.POST)
-    public String addUser(@ModelAttribute("user") User user, ModelMap map, HttpServletRequest request) {
+    public String addUser(ModelMap map, HttpServletRequest request) {
+        User user = new User();
+        user.setUsername(request.getParameter("username"));
+        user.setPassword(request.getParameter("password"));
+        user.setEmail(request.getParameter("email"));
+        user.setId("none");
+        
         MongoDB mongo = new MongoDB(user);
         if(mongo.registerUser()) {
             request.getSession().setAttribute("username", user.getUsername());
             request.getSession().setAttribute("id", user.getId());
+            request.getSession().setAttribute("dropbox_token", "nothing");
         }
-        return "account/login";
+        return "redirect:my-drive";
     }
 }

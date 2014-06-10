@@ -8,8 +8,12 @@
     </ol>
     <c:choose>
         <c:when test="${dropbox_token == ''}">
-            <img src="<c:url value="/images/icons/dropbox_icon.ico" />" style="position:absolute;top:50%;left:50%;margin:-150px 0 0 -125px;"/>
-            <a href="<c:url value="/dropbox" />"><button type="button" class="btn btn-primary success" style="position:absolute;top:50%;left:50%;margin:100px 0 0 -50px;">Link account</button></a>
+            <div style="background-color:#fff;height:100%;">
+                <img src="<c:url value="/images/icons/dropbox_icon.ico" />" style="position:absolute;top:50%;left:50%;margin:-150px 0 0 -125px;"/>
+                <a href="<c:url value="/dropbox" />">
+                    <button type="button" class="btn btn-primary success" style="position:absolute;top:50%;left:50%;margin:100px 0 0 -50px;">Link account</button>
+                </a>
+            </div>
         </c:when>
         <c:otherwise>
             <div class="panel-group" id="accordion" style="margin-top:10px;">
@@ -59,7 +63,8 @@
                                             <div class="panel-body">
                                                 <ul class="nav nav-pills nav-stacked">
                                                     <li class="active"><a href="<c:url value="/my-drive/dropbox/downloads${file.path}" />">Download</a></li>
-                                                    <li style="cursor:pointer;" data-toggle="modal" data-target="#edit-modal" onmousedown="document.getElementById('edit-title').innerHTML = '${file.path}'; getDropboxFileInfo();"><a>Edit</a></li> 
+                                                    <li style="cursor:pointer;" data-toggle="modal" data-target="#edit-modal" onmousedown="document.getElementById('edit-title').innerHTML = '${file.path}';
+                                                            getDropboxFileInfo();"><a>Edit</a></li> 
                                                     <li style="cursor:pointer;" onmousedown="deleteDropboxFile('${file.path}')"><a>Delete</a></li>
                                                 </ul>
                                             </div>
